@@ -20,7 +20,7 @@ final class Archive
     private string $tmpPath;
     private ?ZipArchive $zip = null;
 
-    public function __construct(protected string $archivePath)
+    public function __construct(private readonly string $archivePath)
     {
         $this->tmpPath = tempnam(directory: sys_get_temp_dir(), prefix: 'xlsx_parser_archive');
         unlink(filename: $this->tmpPath);

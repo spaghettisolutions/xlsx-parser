@@ -14,7 +14,7 @@ final class Value
     public const TYPE_STRING = 'str';
     public const TYPE_INLINE_STRING = 'inlineStr';
 
-    public function __construct(protected Date $dateTransformer, protected SharedStrings $sharedStrings, protected Styles $styles)
+    public function __construct(private readonly Date $dateTransformer, private readonly SharedStrings $sharedStrings, private readonly Styles $styles)
     {
     }
 

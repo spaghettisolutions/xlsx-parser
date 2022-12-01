@@ -4,9 +4,17 @@ namespace SimpleToImplement\XLSXParser\XLSX;
 
 use XMLReader;
 
-class SharedStrings extends AbstractXMLDictionary
+use function str_replace;
+use function trim;
+
+final class SharedStrings extends AbstractXMLDictionary
 {
     private int $currentIndex = -1;
+
+    public function __construct(string $path)
+    {
+        parent::__construct(path: $path);
+    }
 
     protected function readNext(): void
     {
@@ -18,7 +26,7 @@ class SharedStrings extends AbstractXMLDictionary
                         $this->currentIndex++;
                         break;
                     case 't':
-                        $this->values[$this->currentIndex] = $xml->readString();
+                        $this->values[$this->currentIndex] = trim(string: str_replace(search: "\u{a0}", replace: ' ', subject: $xml->readString()), characters: ' ');
 
                         return;
                 }

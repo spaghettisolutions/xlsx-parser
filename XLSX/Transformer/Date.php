@@ -10,7 +10,7 @@ use function sprintf;
 
 final class Date
 {
-    protected DateTimeImmutable $baseDate;
+    private DateTimeImmutable $baseDate;
 
     public function __construct()
     {

@@ -24,7 +24,7 @@ final class XLSX implements XLSXInterface
     private array $worksheetPaths = [];
 
     public function __construct(
-        protected Archive $archive,
+        private readonly Archive $archive,
     ) {
     }
 
