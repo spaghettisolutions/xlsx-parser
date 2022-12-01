@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace SimpleToImplement\XLSXParser\XLSX\Transformer;
+namespace SimpleToImplement\XLSXParser\Transformer;
 
 use function ord;
 use function str_split;
