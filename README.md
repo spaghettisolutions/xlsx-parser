@@ -27,6 +27,3 @@ foreach ($workbook->createRowIterator($index) as $values) {
     var_dump($values);
 }
 ```
-
-Tests
----
