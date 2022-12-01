@@ -1,0 +1,36 @@
+{
+    "name": "simpletoimplement/xlsx-parser",
+    "description": "TODO",
+    "type": "library",
+    "keywords": [
+        "excel",
+        "library",
+        "parser",
+        "php",
+        "symfony",
+        "xlsx"
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=8.1.0",
+        "ext-xmlreader": "*",
+        "ext-zip": "*"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "SimpleToImplement\\XLSXParser\\": ""
+        }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.x-dev"
+        },
+        "thanks": {
+            "name": "simpletoimplement/xlsx-parser",
+            "url": "https://github.com/simpletoimplement/xlsx-parser"
+        }
+    }
+}
