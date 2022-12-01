@@ -1,9 +1,9 @@
 <?php declare(strict_types = 1);
 
-namespace SimpleToImplement\XLSXParser\Transformer;
+namespace Spaghetti\XLSXParser\Transformer;
 
-use SimpleToImplement\XLSXParser\SharedStrings;
-use SimpleToImplement\XLSXParser\Styles;
+use Spaghetti\XLSXParser\SharedStrings;
+use Spaghetti\XLSXParser\Styles;
 
 final class Value
 {

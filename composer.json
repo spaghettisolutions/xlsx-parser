@@ -1,6 +1,6 @@
 {
-    "name": "simpletoimplement/xlsx-parser",
-    "description": "TODO",
+    "name": "spaghetti/xlsx-parser",
+    "description": "Very simple to implement xlsx parser to extract data from spreadsheets",
     "type": "library",
     "keywords": [
         "excel",
@@ -17,11 +17,12 @@
         "ext-zip": "*"
     },
     "require-dev": {
-        "friendsofphp/php-cs-fixer": "*"
+        "friendsofphp/php-cs-fixer": "*",
+        "spaghetti/php-cs-fixer-config": "*"
     },
     "autoload": {
         "psr-4": {
-            "SimpleToImplement\\": ""
+            "Spaghetti\\": ""
         }
     },
     "extra": {
@@ -29,8 +30,8 @@
             "dev-master": "1.x-dev"
         },
         "thanks": {
-            "name": "simpletoimplement/xlsx-parser",
-            "url": "https://github.com/simpletoimplement/xlsx-parser"
+            "name": "spaghetti/xlsx-parser",
+            "url": "https://github.com/spaghettisolutions/xlsx-parser"
         }
     }
 }

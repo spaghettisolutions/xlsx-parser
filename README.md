@@ -8,17 +8,17 @@ Installation
 The recommended way to install is via Composer:
 
 ```shell
-composer require simpletoimplement/xlsx-parser
+composer require spaghetti/xlsx-parser
 ```
 
 This package requires at least PHP version 8.1
 
-### Very simple to implement xlsx parser to extract data from excel spreadsheets
+### Very simple to implement xlsx parser to extract data from spreadsheets
 
 Usage
 ---
 ```php
-use SimpleToImplement\XLSXParser\XLSXParser;
+use Spaghetti\XLSXParser;
 
 $workbook = (new XLSXParser())->open('workbook.xlsx');
 $index = $workbook->getWorksheetIndex('mysheet');

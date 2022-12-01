@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace SimpleToImplement\XLSXParser\Transformer;
+namespace Spaghetti\XLSXParser\Transformer;
 
 use function ord;
 use function str_split;
