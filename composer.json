@@ -24,12 +24,12 @@
     },
     "autoload": {
         "psr-4": {
-            "Spaghetti\\": ""
+            "Spaghetti\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Spaghetti\\Tests\\": "tests/src"
+            "Spaghetti\\Tests\\": "tests/src/"
         }
     },
     "minimum-stability": "dev",
