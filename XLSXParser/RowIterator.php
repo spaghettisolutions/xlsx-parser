@@ -2,10 +2,12 @@
 
 namespace Spaghetti\XLSXParser;
 
+use InvalidArgumentException;
 use Iterator;
 use XMLReader;
 
 use function count;
+use function sprintf;
 
 /**
  * @internal
@@ -92,6 +94,11 @@ final class RowIterator implements Iterator
         $this->xml?->close();
 
         $this->xml = false === ($xml = XMLReader::open(uri: $this->path)) ? null : $xml;
+
+        if (null === $this->xml) {
+            throw new InvalidArgumentException(message: sprintf('Not a XLSX file: %s', $this->path));
+        }
+
         $this->next();
     }
 

@@ -2,7 +2,12 @@
 
 namespace Spaghetti\XLSXParser;
 
+use Error;
+use Exception;
+use InvalidArgumentException;
 use XMLReader;
+
+use function sprintf;
 
 /**
  * @internal
@@ -32,7 +37,12 @@ abstract class AbstractXMLResource
     protected function createXMLReader(): XMLReader
     {
         $xml = new XMLReader();
-        $xml->open(uri: $this->path);
+
+        try {
+            $xml->open(uri: $this->path);
+        } catch (Exception|Error $exception) {
+            throw new InvalidArgumentException(message: sprintf('Not a XLSX file: %s', $this->path), previous: $exception);
+        }
 
         return $xml;
     }
