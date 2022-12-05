@@ -38,7 +38,6 @@ final class XLSX implements Contracts\XLSXInterface
     public function createRowIterator(int $worksheetIndex, array $options = []): Iterator
     {
         return new RowIterator(
-            columnIndexTransformer: new Transformer\ColumnIndex(),
             valueTransformer: $this->getValueTransformer(),
             path: $this->archive->extract(filePath: array_values(array: $this->getWorksheetPaths())[$worksheetIndex]),
         );
@@ -86,7 +85,7 @@ final class XLSX implements Contracts\XLSXInterface
     private function getWorksheetPaths(): array
     {
         if ([] === $this->worksheetPaths) {
-            $this->worksheetPaths = (new WorksheetReader())->getWorksheetPaths(relationships: $this->getRelationships(), path: $this->archive->extract(filePath: self::WORKBOOK_PATH));
+            $this->worksheetPaths = (new WorksheetReader(path: $this->archive->extract(filePath: self::WORKBOOK_PATH)))->getWorksheetPaths(relationships: $this->getRelationships());
         }
 
         return $this->worksheetPaths;

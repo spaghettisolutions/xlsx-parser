@@ -15,7 +15,7 @@ final class Styles extends AbstractXMLDictionary
     public const FORMAT_DATE = 1;
     private const FORMAT_DEFAULT = 0;
 
-    private array $nativeDateFormats = [14, 15, 16, 17, 18, 19, 20, 21, 22];
+    private array $nativeDateFormats = [14, 15, 16, 17, 18, 19, 20, 21, 22, ];
     private array $numberFormats = [];
     private bool $inXfs = false;
 

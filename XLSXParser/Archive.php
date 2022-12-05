@@ -25,7 +25,7 @@ final class Archive
 
     public function __construct(private readonly string $archivePath)
     {
-        $this->tmpPath = tempnam(directory: sys_get_temp_dir(), prefix: 'xlsx_parser_archive');
+        $this->tmpPath = tempnam(directory: sys_get_temp_dir(), prefix: 'spaghetti_xlsx_parser_archive');
         unlink(filename: $this->tmpPath);
     }
 

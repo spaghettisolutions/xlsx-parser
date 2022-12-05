@@ -16,12 +16,14 @@ final class RowIterator implements Iterator
     private array $currentValue;
     private bool $valid;
     private int $currentKey;
+    private readonly Transformer\ColumnIndex $columnIndexTransformer;
 
     public function __construct(
-        private readonly Transformer\ColumnIndex $columnIndexTransformer,
         private readonly Transformer\Value $valueTransformer,
         private readonly string $path,
+        ?Transformer\ColumnIndex $columnIndexTransformer = null,
     ) {
+        $this->columnIndexTransformer = $columnIndexTransformer ?? new Transformer\ColumnIndex();
     }
 
     public function current(): array

@@ -7,12 +7,11 @@ use XMLReader;
 /**
  * @internal
  */
-final class WorksheetReader
+final class WorksheetReader extends AbstractXMLResource
 {
-    public function getWorksheetPaths(Relationships $relationships, $path): array
+    public function getWorksheetPaths(Relationships $relationships): array
     {
-        $xml = new XMLReader();
-        $xml->open(uri: $path);
+        $xml = $this->getXMLReader();
         $paths = [];
 
         while ($xml->read()) {

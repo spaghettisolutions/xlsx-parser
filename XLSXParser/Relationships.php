@@ -23,7 +23,7 @@ final class Relationships extends AbstractXMLResource
         while ($xml->read()) {
             if (XMLReader::ELEMENT === $xml->nodeType && 'Relationship' === $xml->name) {
                 $type = basename(path: (string) $xml->getAttribute(name: 'Type'));
-                $this->storeRelationShipByType(type: $type, id: $xml->getAttribute(name: 'Id'), target: 'xl/' . $xml->getAttribute(name: 'Target'));
+                $this->storeRelationshipTarget(type: $type, id: $xml->getAttribute(name: 'Id'), target: 'xl/' . $xml->getAttribute(name: 'Target'));
             }
         }
 
@@ -45,7 +45,7 @@ final class Relationships extends AbstractXMLResource
         return $this->stylePath;
     }
 
-    private function storeRelationShipByType(string $type, string $id, string $target): void
+    private function storeRelationshipTarget(string $type, string $id, string $target): void
     {
         switch ($type) {
             case 'worksheet':

@@ -14,14 +14,10 @@ final class SharedStrings extends AbstractXMLDictionary
 {
     private int $currentIndex = -1;
 
-    public function __construct(string $path)
-    {
-        parent::__construct(path: $path);
-    }
-
     protected function readNext(): void
     {
         $xml = $this->getXMLReader();
+
         while ($xml->read()) {
             if (XMLReader::ELEMENT === $xml->nodeType) {
                 switch ($xml->name) {
