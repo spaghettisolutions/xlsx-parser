@@ -2,9 +2,12 @@
 
 namespace Spaghetti;
 
-final class XLSXParser
+use Spaghetti\XLSXParser\Contracts\XLSXInterface;
+use Spaghetti\XLSXParser\Contracts\XLSXLoaderInterface;
+
+final class XLSXParser implements XLSXLoaderInterface
 {
-    public function open(string $path): XLSXParser\XLSXInterface
+    public function open(string $path): XLSXInterface
     {
         return new XLSXParser\XLSX(
             archive: new XLSXParser\Archive(archivePath: $path),

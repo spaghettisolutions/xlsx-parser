@@ -5,6 +5,9 @@ namespace Spaghetti\XLSXParser\Transformer;
 use function ord;
 use function str_split;
 
+/**
+ * @internal
+ */
 final class ColumnIndex
 {
     public function transform(string $name): int

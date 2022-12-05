@@ -7,10 +7,13 @@ use XMLReader;
 use function in_array;
 use function preg_match;
 
+/**
+ * @internal
+ */
 final class Styles extends AbstractXMLDictionary
 {
-    public const FORMAT_DEFAULT = 0;
     public const FORMAT_DATE = 1;
+    private const FORMAT_DEFAULT = 0;
 
     private array $nativeDateFormats = [14, 15, 16, 17, 18, 19, 20, 21, 22];
     private array $numberFormats = [];
@@ -28,14 +31,12 @@ final class Styles extends AbstractXMLDictionary
                 $this->inXfs = true;
             } elseif ($this->inXfs && XMLReader::ELEMENT === $xml->nodeType && 'xf' === $xml->name) {
                 $fmtId = $xml->getAttribute(name: 'numFmtId');
-                if (isset($this->numberFormats[$fmtId])) {
-                    $value = $this->numberFormats[$fmtId];
-                } elseif (in_array(needle: $fmtId, haystack: $this->nativeDateFormats, strict: true)) {
-                    $value = self::FORMAT_DATE;
-                } else {
-                    $value = self::FORMAT_DEFAULT;
-                }
-                $this->values[] = $value;
+
+                $this->values[] = match (true) {
+                    isset($this->numberFormats[$fmtId]) => $this->numberFormats[$fmtId],
+                    in_array(needle: $fmtId, haystack: $this->nativeDateFormats, strict: true) => self::FORMAT_DATE,
+                    default => self::FORMAT_DEFAULT,
+                };
 
                 return;
             }

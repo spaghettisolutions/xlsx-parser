@@ -4,7 +4,10 @@ namespace Spaghetti\XLSXParser;
 
 use XMLReader;
 
-final class WorksheetListReader
+/**
+ * @internal
+ */
+final class WorksheetReader
 {
     public function getWorksheetPaths(Relationships $relationships, $path): array
     {

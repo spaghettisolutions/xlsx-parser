@@ -11,7 +11,7 @@ The recommended way to install is via Composer:
 composer require spaghetti/xlsx-parser
 ```
 
-This package requires at least PHP version 8.0
+This package requires at least PHP version 8.1
 
 ### Very simple to implement xlsx parser to extract data from spreadsheets
 

@@ -4,6 +4,9 @@ namespace Spaghetti\XLSXParser;
 
 use XMLReader;
 
+/**
+ * @internal
+ */
 abstract class AbstractXMLResource
 {
     private ?XMLReader $xml = null;
@@ -14,9 +17,7 @@ abstract class AbstractXMLResource
 
     public function __destruct()
     {
-        if (null !== $this->xml) {
-            $this->closeXMLReader();
-        }
+        $this->closeXMLReader();
     }
 
     protected function getXMLReader(): XMLReader
@@ -38,7 +39,9 @@ abstract class AbstractXMLResource
 
     protected function closeXMLReader(): void
     {
-        $this->xml->close();
-        $this->xml = null;
+        if (null !== $this->xml) {
+            $this->xml->close();
+            $this->xml = null;
+        }
     }
 }

@@ -1,6 +1,6 @@
 <?php declare(strict_types = 1);
 
-namespace Spaghetti\XLSXParser;
+namespace Spaghetti\XLSXParser\Contracts;
 
 interface XLSXLoaderInterface
 {

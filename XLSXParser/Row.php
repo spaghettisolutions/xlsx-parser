@@ -4,6 +4,9 @@ namespace Spaghetti\XLSXParser;
 
 use function count;
 
+/**
+ * @internal
+ */
 final class Row
 {
     private array $values = [];

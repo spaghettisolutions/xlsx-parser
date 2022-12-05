@@ -7,6 +7,9 @@ use XMLReader;
 use function str_replace;
 use function trim;
 
+/**
+ * @internal
+ */
 final class SharedStrings extends AbstractXMLDictionary
 {
     private int $currentIndex = -1;

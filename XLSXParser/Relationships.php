@@ -6,11 +6,14 @@ use XMLReader;
 
 use function basename;
 
+/**
+ * @internal
+ */
 final class Relationships extends AbstractXMLResource
 {
     private array $workSheetPaths;
-    private string $stylePath;
     private string $sharedStringPath;
+    private string $stylePath;
 
     public function __construct(string $path)
     {

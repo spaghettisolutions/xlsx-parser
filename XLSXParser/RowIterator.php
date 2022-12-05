@@ -7,12 +7,15 @@ use XMLReader;
 
 use function count;
 
+/**
+ * @internal
+ */
 final class RowIterator implements Iterator
 {
-    private bool $valid;
-    private array $currentValue;
-    private int $currentKey;
     private ?XMLReader $xml = null;
+    private array $currentValue;
+    private bool $valid;
+    private int $currentKey;
 
     public function __construct(
         private readonly Transformer\ColumnIndex $columnIndexTransformer,
@@ -46,8 +49,8 @@ final class RowIterator implements Iterator
                         break;
                     case 'c':
                         $columnIndex = $this->columnIndexTransformer->transform(name: $this->xml->getAttribute(name: 'r'));
-                        $style = $this->getValue(value: $this->xml->getAttribute(name: 's'));
-                        $type = $this->getValue(value: $this->xml->getAttribute(name: 't'));
+                        $style = $this->xml->getAttribute(name: 's') ?? '';
+                        $type = $this->xml->getAttribute(name: 't') ?? '';
                         break;
                     case 'v':
                         $row->addValue(
@@ -93,10 +96,5 @@ final class RowIterator implements Iterator
     public function valid(): bool
     {
         return $this->valid;
-    }
-
-    private function getValue(?string $value = null): string
-    {
-        return $value ?? '';
     }
 }

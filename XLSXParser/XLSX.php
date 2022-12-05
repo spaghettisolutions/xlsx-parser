@@ -11,15 +11,17 @@ use function array_values;
 use function is_int;
 use function sprintf;
 
-final class XLSX implements XLSXInterface
+/**
+ * @internal
+ */
+final class XLSX implements Contracts\XLSXInterface
 {
-    public const RELATIONSHIPS_PATH = 'xl/_rels/workbook.xml.rels';
-    public const WORKBOOK_PATH = 'xl/workbook.xml';
+    private const RELATIONSHIPS_PATH = 'xl/_rels/workbook.xml.rels';
+    private const WORKBOOK_PATH = 'xl/workbook.xml';
 
     private ?Relationships $relationships = null;
     private ?SharedStrings $sharedStrings = null;
     private ?Styles $styles = null;
-
     private ?Transformer\Value $valueTransformer = null;
     private array $worksheetPaths = [];
 
@@ -54,8 +56,7 @@ final class XLSX implements XLSXInterface
     private function getRelationships(): ?Relationships
     {
         if (null === $this->relationships) {
-            $path = $this->archive->extract(self::RELATIONSHIPS_PATH);
-            $this->relationships = new Relationships(path: $path);
+            $this->relationships = new Relationships(path: $this->archive->extract(filePath: self::RELATIONSHIPS_PATH));
         }
 
         return $this->relationships;
@@ -65,7 +66,6 @@ final class XLSX implements XLSXInterface
     {
         if (null === $this->valueTransformer) {
             $this->valueTransformer = new Transformer\Value(
-                dateTransformer: new Transformer\Date(),
                 sharedStrings: $this->getSharedStrings(),
                 styles: $this->getStyles(),
             );
@@ -77,8 +77,7 @@ final class XLSX implements XLSXInterface
     private function getSharedStrings(): SharedStrings
     {
         if (null === $this->sharedStrings) {
-            $path = $this->archive->extract(filePath: $this->relationships->getSharedStringsPath());
-            $this->sharedStrings = new SharedStrings(path: $path);
+            $this->sharedStrings = new SharedStrings(path: $this->archive->extract(filePath: $this->relationships->getSharedStringsPath()));
         }
 
         return $this->sharedStrings;
@@ -87,8 +86,7 @@ final class XLSX implements XLSXInterface
     private function getWorksheetPaths(): array
     {
         if ([] === $this->worksheetPaths) {
-            $path = $this->archive->extract(filePath: self::WORKBOOK_PATH);
-            $this->worksheetPaths = (new WorksheetListReader())->getWorksheetPaths(relationships: $this->getRelationships(), path: $path);
+            $this->worksheetPaths = (new WorksheetReader())->getWorksheetPaths(relationships: $this->getRelationships(), path: $this->archive->extract(filePath: self::WORKBOOK_PATH));
         }
 
         return $this->worksheetPaths;
@@ -97,8 +95,7 @@ final class XLSX implements XLSXInterface
     private function getStyles(): ?Styles
     {
         if (null === $this->styles) {
-            $path = $this->archive->extract(filePath: $this->relationships->getStylesPath());
-            $this->styles = new Styles(path: $path);
+            $this->styles = new Styles(path: $this->archive->extract(filePath: $this->relationships->getStylesPath()));
         }
 
         return $this->styles;

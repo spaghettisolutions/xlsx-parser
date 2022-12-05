@@ -15,6 +15,9 @@ use function sys_get_temp_dir;
 use function tempnam;
 use function unlink;
 
+/**
+ * @internal
+ */
 final class Archive
 {
     private string $tmpPath;
@@ -80,6 +83,7 @@ final class Archive
                 unlink(filename: $file->getRealPath());
             }
         }
+
         rmdir(directory: $this->tmpPath);
     }
 

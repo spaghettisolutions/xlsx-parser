@@ -6,6 +6,9 @@ use InvalidArgumentException;
 
 use function sprintf;
 
+/**
+ * @internal
+ */
 abstract class AbstractXMLDictionary extends AbstractXMLResource
 {
     protected bool $valid = true;
@@ -16,6 +19,7 @@ abstract class AbstractXMLDictionary extends AbstractXMLResource
         while ($this->valid && !isset($this->values[$index])) {
             $this->readNext();
         }
+
         if (!isset($this->values[$index])) {
             throw new InvalidArgumentException(message: sprintf('No value with index %s', $index));
         }
