@@ -24,19 +24,18 @@ final class Styles extends AbstractXMLDictionary
         $xml = $this->getXMLReader();
 
         while ($xml->read()) {
-            if (XMLReader::END_ELEMENT === $xml->nodeType && 'cellXfs' === $xml->name) {
-                break;
+            if ('cellXfs' === $xml->name) {
+                switch ($xml->nodeType) {
+                    case XMLReader::END_ELEMENT:
+                        break 2;
+                    case XMLReader::ELEMENT:
+                        $this->inXfs = true;
+                        continue 2;
+                }
             }
-            if (XMLReader::ELEMENT === $xml->nodeType && 'cellXfs' === $xml->name) {
-                $this->inXfs = true;
-            } elseif ($this->inXfs && XMLReader::ELEMENT === $xml->nodeType && 'xf' === $xml->name) {
-                $fmtId = $xml->getAttribute(name: 'numFmtId');
 
-                $this->values[] = match (true) {
-                    isset($this->numberFormats[$fmtId]) => $this->numberFormats[$fmtId],
-                    in_array(needle: $fmtId, haystack: $this->nativeDateFormats, strict: true) => self::FORMAT_DATE,
-                    default => self::FORMAT_DEFAULT,
-                };
+            if ($this->inXfs && XMLReader::ELEMENT === $xml->nodeType && 'xf' === $xml->name) {
+                $this->values[] = $this->getValue((int) $xml->getAttribute(name: 'numFmtId'));
             }
         }
 
@@ -54,18 +53,7 @@ final class Styles extends AbstractXMLDictionary
                 break;
             }
             if (XMLReader::ELEMENT === $xml->nodeType) {
-                switch ($xml->name) {
-                    case 'numFmt':
-                        $this->numberFormats[$xml->getAttribute(name: 'numFmtId')] =
-                            preg_match(
-                                pattern: '{^(\[\$[[:alpha:]]*-[0-9A-F]*\])*[hmsdy]}i',
-                                subject: $xml->getAttribute(name: 'formatCode'),
-                            ) ? self::FORMAT_DATE : self::FORMAT_DEFAULT;
-                        break;
-                    case 'cellXfs':
-                        $needsRewind = true;
-                        break;
-                }
+                $this->process($xml, $needsRewind);
             }
         }
 
@@ -75,5 +63,34 @@ final class Styles extends AbstractXMLDictionary
         }
 
         return $xml;
+    }
+
+    private function process(XMLReader $xml, bool &$needsRewind): void
+    {
+        switch ($xml->name) {
+            case 'numFmt':
+                $this->numberFormats[$xml->getAttribute(name: 'numFmtId')] =
+                    preg_match(
+                        pattern: '{^(\[\$[[:alpha:]]*-[0-9A-F]*\])*[hmsdy]}i',
+                        subject: $xml->getAttribute(name: 'formatCode'),
+                    ) ? self::FORMAT_DATE : self::FORMAT_DEFAULT;
+
+                return;
+            case 'cellXfs':
+                $needsRewind = true;
+
+                return;
+        }
+
+        return;
+    }
+
+    private function getValue(int $fmtId): int
+    {
+        return match (true) {
+            isset($this->numberFormats[$fmtId]) => $this->numberFormats[$fmtId],
+            in_array(needle: $fmtId, haystack: $this->nativeDateFormats, strict: true) => self::FORMAT_DATE,
+            default => self::FORMAT_DEFAULT,
+        };
     }
 }

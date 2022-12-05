@@ -35,7 +35,7 @@ final class XLSX implements Contracts\XLSXInterface
         return array_keys(array: $this->getWorksheetPaths());
     }
 
-    public function getRows(int $index, array $options = []): Iterator
+    public function getRows(int $index): Iterator
     {
         return new RowIterator(
             valueTransformer: $this->getValueTransformer(),

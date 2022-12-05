@@ -20,18 +20,23 @@ final class SharedStrings extends AbstractXMLDictionary
 
         while ($xml->read()) {
             if (XMLReader::ELEMENT === $xml->nodeType) {
-                switch ($xml->name) {
-                    case 'si':
-                        $this->currentIndex++;
-                        break;
-                    case 't':
-                        $this->values[$this->currentIndex] = trim(string: str_replace(search: "\u{a0}", replace: ' ', subject: $xml->readString()), characters: ' ');
-                        break;
-                }
+                $this->process($xml);
             }
         }
 
         $this->valid = false;
         $this->closeXMLReader();
+    }
+
+    private function process(XMLReader $xml): void
+    {
+        switch ($xml->name) {
+            case 'si':
+                $this->currentIndex++;
+                break;
+            case 't':
+                $this->values[$this->currentIndex] = trim(string: str_replace(search: "\u{a0}", replace: ' ', subject: $xml->readString()), characters: ' ');
+                break;
+        }
     }
 }

@@ -20,7 +20,7 @@ final class WorksheetReader extends AbstractXMLResource
                     name: 'id',
                     namespace: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships',
                 );
-                $paths[$xml->getAttribute(name: 'name')] = $relationships->getWorksheetPath(id: $rId);
+                $paths[$xml->getAttribute(name: 'name')] = $relationships->getWorksheetPath(rId: $rId);
             }
         }
 

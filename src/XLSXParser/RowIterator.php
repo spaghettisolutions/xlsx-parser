@@ -2,12 +2,10 @@
 
 namespace Spaghetti\XLSXParser;
 
-use InvalidArgumentException;
 use Iterator;
 use XMLReader;
 
 use function count;
-use function sprintf;
 
 /**
  * @internal
@@ -17,7 +15,7 @@ final class RowIterator implements Iterator
     private ?XMLReader $xml = null;
     private array $currentValue;
     private bool $valid;
-    private int $currentKey;
+    private ?int $currentKey;
     private readonly Transformer\ColumnIndex $columnIndexTransformer;
 
     public function __construct(
@@ -46,26 +44,7 @@ final class RowIterator implements Iterator
 
         while ($this->xml->read()) {
             if (XMLReader::ELEMENT === $this->xml->nodeType) {
-                switch ($this->xml->name) {
-                    case 'row':
-                        $currentKey = (int) $this->xml->getAttribute(name: 'r');
-                        $row = new Row();
-                        break;
-                    case 'c':
-                        $columnIndex = $this->columnIndexTransformer->transform(name: $this->xml->getAttribute(name: 'r'));
-                        $style = $this->xml->getAttribute(name: 's') ?? '';
-                        $type = $this->xml->getAttribute(name: 't') ?? '';
-                        break;
-                    case 'v':
-                        $row->addValue(
-                            columnIndex: $columnIndex,
-                            value: $this->valueTransformer->transform(value: $this->xml->readString(), type: $type, style: $style),
-                        );
-                        break;
-                    case 'is':
-                        $row->addValue(columnIndex: $columnIndex, value: $this->xml->readString());
-                        break;
-                }
+                $this->process($columnIndex, $currentKey, $row, $type, $style);
 
                 continue;
             }
@@ -95,15 +74,35 @@ final class RowIterator implements Iterator
 
         $this->xml = false === ($xml = XMLReader::open(uri: $this->path)) ? null : $xml;
 
-        if (null === $this->xml) {
-            throw new InvalidArgumentException(message: sprintf('Not a XLSX file: %s', $this->path));
-        }
-
         $this->next();
     }
 
     public function valid(): bool
     {
         return $this->valid;
+    }
+
+    private function process(?int &$columnIndex, ?int &$currentKey, ?Row &$row, ?string &$type, ?string &$style): void
+    {
+        switch ($this->xml->name) {
+            case 'row':
+                $currentKey = (int) $this->xml->getAttribute(name: 'r');
+                $row = new Row();
+                break;
+            case 'c':
+                $columnIndex = $this->columnIndexTransformer->transform(name: $this->xml->getAttribute(name: 'r'));
+                $style = $this->xml->getAttribute(name: 's') ?? '';
+                $type = $this->xml->getAttribute(name: 't') ?? '';
+                break;
+            case 'v':
+                $row->addValue(
+                    columnIndex: $columnIndex,
+                    value: $this->valueTransformer->transform(value: $this->xml->readString(), type: $type, style: $style),
+                );
+                break;
+            case 'is':
+                $row->addValue(columnIndex: $columnIndex, value: $this->xml->readString());
+                break;
+        }
     }
 }

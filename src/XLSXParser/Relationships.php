@@ -11,9 +11,9 @@ use function basename;
  */
 final class Relationships extends AbstractXMLResource
 {
-    private array $workSheetPaths;
-    private string $sharedStringPath;
-    private string $stylePath;
+    private array $workSheetPaths = [];
+    private string $sharedStringPath = '';
+    private string $stylePath = '';
 
     public function __construct(string $path)
     {
@@ -23,16 +23,16 @@ final class Relationships extends AbstractXMLResource
         while ($xml->read()) {
             if (XMLReader::ELEMENT === $xml->nodeType && 'Relationship' === $xml->name) {
                 $type = basename(path: (string) $xml->getAttribute(name: 'Type'));
-                $this->storeRelationshipTarget(type: $type, id: $xml->getAttribute(name: 'Id'), target: 'xl/' . $xml->getAttribute(name: 'Target'));
+                $this->storeRelationshipTarget(type: $type, rId: $xml->getAttribute(name: 'Id'), target: 'xl/' . $xml->getAttribute(name: 'Target'));
             }
         }
 
         $this->closeXMLReader();
     }
 
-    public function getWorksheetPath(string $id): string
+    public function getWorksheetPath(string $rId): string
     {
-        return $this->workSheetPaths[$id];
+        return $this->workSheetPaths[$rId];
     }
 
     public function getSharedStringsPath(): string
@@ -45,11 +45,11 @@ final class Relationships extends AbstractXMLResource
         return $this->stylePath;
     }
 
-    private function storeRelationshipTarget(string $type, string $id, string $target): void
+    private function storeRelationshipTarget(string $type, string $rId, string $target): void
     {
         switch ($type) {
             case 'worksheet':
-                $this->workSheetPaths[$id] = $target;
+                $this->workSheetPaths[$rId] = $target;
                 break;
             case 'styles':
                 $this->stylePath = $target;

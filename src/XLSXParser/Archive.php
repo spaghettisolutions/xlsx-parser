@@ -79,9 +79,10 @@ final class Archive
         foreach ($files as $file) {
             if ($file->isDir()) {
                 rmdir(directory: $file->getRealPath());
-            } else {
-                unlink(filename: $file->getRealPath());
+                continue;
             }
+
+            unlink(filename: $file->getRealPath());
         }
 
         rmdir(directory: $this->tmpPath);

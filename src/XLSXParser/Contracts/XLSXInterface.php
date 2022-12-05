@@ -8,7 +8,7 @@ interface XLSXInterface
 {
     public function getIndex(string $name): int;
 
-    public function getRows(int $index, array $options = []): Iterator;
+    public function getRows(int $index): Iterator;
 
     public function getWorksheets(): array;
 }

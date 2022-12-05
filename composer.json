@@ -4,13 +4,21 @@
     "type": "library",
     "keywords": [
         "excel",
+        "excel-parser",
         "library",
         "parser",
         "php",
         "symfony",
-        "xlsx"
+        "xlsx",
+        "xlsx-parser"
     ],
     "license": "MIT",
+    "authors": [
+        {
+            "name": "simpletoimplement",
+            "email": "simpletoimplement@gmail.com"
+        }
+    ],
     "require": {
         "php": ">=8.1.0",
         "ext-xmlreader": "*",
@@ -45,5 +53,11 @@
             "name": "spaghetti/xlsx-parser",
             "url": "https://github.com/spaghettisolutions/xlsx-parser"
         }
-    }
+    },
+    "funding": [
+        {
+            "type": "issuehunt",
+            "url": "https://issuehunt.io/r/spaghettisolutions/xlsx-parser"
+        }
+    ]
 }
