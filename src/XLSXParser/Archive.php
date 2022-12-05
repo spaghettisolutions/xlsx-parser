@@ -37,7 +37,9 @@ final class Archive
 
     public function extract(string $filePath): string
     {
-        if (!file_exists(filename: $tmpPath = sprintf('%s/%s', $this->tmpPath, $filePath))) {
+        $tmpPath = sprintf('%s/%s', $this->tmpPath, $filePath);
+
+        if (!file_exists(filename: $tmpPath)) {
             $this->getArchive()->extractTo(pathto: $this->tmpPath, files: $filePath);
         }
 
@@ -48,7 +50,9 @@ final class Archive
     {
         if (null === $this->zip) {
             $this->zip = new ZipArchive();
-            if (true !== $errorCode = $this->zip->open(filename: $this->archivePath)) {
+            $errorCode = $this->zip->open(filename: $this->archivePath);
+
+            if (true !== $errorCode) {
                 $this->zip = null;
                 throw new RuntimeException(message: 'Error opening file: ' . $this->getErrorMessage(errorCode: $errorCode));
             }

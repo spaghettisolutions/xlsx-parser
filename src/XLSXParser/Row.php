@@ -21,10 +21,12 @@ final class Row
     public function getData(): array
     {
         $data = [];
+
         foreach ($this->values as $columnIndex => $value) {
             while (count(value: $data) < $columnIndex) {
                 $data[] = '';
             }
+
             $data[] = $value;
         }
 

@@ -35,7 +35,7 @@ final class Styles extends AbstractXMLDictionary
             }
 
             if ($this->inXfs && XMLReader::ELEMENT === $xml->nodeType && 'xf' === $xml->name) {
-                $this->values[] = $this->getValue((int) $xml->getAttribute(name: 'numFmtId'));
+                $this->values[] = $this->getValue(fmtId: (int) $xml->getAttribute(name: 'numFmtId'));
             }
         }
 
@@ -53,7 +53,7 @@ final class Styles extends AbstractXMLDictionary
                 break;
             }
             if (XMLReader::ELEMENT === $xml->nodeType) {
-                $this->process($xml, $needsRewind);
+                $this->process(xml: $xml, needsRewind: $needsRewind);
             }
         }
 
@@ -81,8 +81,6 @@ final class Styles extends AbstractXMLDictionary
 
                 return;
         }
-
-        return;
     }
 
     private function getValue(int $fmtId): int

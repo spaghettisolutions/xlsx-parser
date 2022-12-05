@@ -8,7 +8,7 @@ use function str_split;
 /**
  * @internal
  */
-final class ColumnIndex
+final class Column
 {
     public function transform(string $name): int
     {

@@ -16,14 +16,14 @@ final class RowIterator implements Iterator
     private array $currentValue;
     private bool $valid;
     private ?int $currentKey;
-    private readonly Transformer\ColumnIndex $columnIndexTransformer;
+    private readonly Transformer\Column $columnTransformer;
 
     public function __construct(
         private readonly Transformer\Value $valueTransformer,
         private readonly string $path,
-        ?Transformer\ColumnIndex $columnIndexTransformer = null,
+        ?Transformer\Column $columnTransformer = null,
     ) {
-        $this->columnIndexTransformer = $columnIndexTransformer ?? new Transformer\ColumnIndex();
+        $this->columnTransformer = $columnTransformer ?? new Transformer\Column();
     }
 
     public function current(): array
@@ -44,7 +44,7 @@ final class RowIterator implements Iterator
 
         while ($this->xml->read()) {
             if (XMLReader::ELEMENT === $this->xml->nodeType) {
-                $this->process($columnIndex, $currentKey, $row, $type, $style);
+                $this->process(columnIndex: $columnIndex, currentKey: $currentKey, row: $row, type: $type, style: $style);
 
                 continue;
             }
@@ -71,8 +71,9 @@ final class RowIterator implements Iterator
     public function rewind(): void
     {
         $this->xml?->close();
+        $xml = new XMLReader();
 
-        $this->xml = false === ($xml = XMLReader::open(uri: $this->path)) ? null : $xml;
+        $this->xml = false === $xml->open(uri: $this->path) ? null : $xml;
 
         $this->next();
     }
@@ -90,7 +91,7 @@ final class RowIterator implements Iterator
                 $row = new Row();
                 break;
             case 'c':
-                $columnIndex = $this->columnIndexTransformer->transform(name: $this->xml->getAttribute(name: 'r'));
+                $columnIndex = $this->columnTransformer->transform(name: $this->xml->getAttribute(name: 'r'));
                 $style = $this->xml->getAttribute(name: 's') ?? '';
                 $type = $this->xml->getAttribute(name: 't') ?? '';
                 break;

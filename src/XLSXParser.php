@@ -3,9 +3,9 @@
 namespace Spaghetti;
 
 use Spaghetti\XLSXParser\Contracts\XLSXInterface;
-use Spaghetti\XLSXParser\Contracts\XLSXLoaderInterface;
+use Spaghetti\XLSXParser\Contracts\XLSXParserInterface;
 
-final class XLSXParser implements XLSXLoaderInterface
+final class XLSXParser implements XLSXParserInterface
 {
     public function open(string $path): XLSXInterface
     {

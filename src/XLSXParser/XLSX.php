@@ -45,7 +45,9 @@ final class XLSX implements Contracts\XLSXInterface
 
     public function getIndex(string $name): int
     {
-        if (is_int(value: $result = array_search(needle: $name, haystack: $this->getWorksheets(), strict: true))) {
+        $result = array_search(needle: $name, haystack: $this->getWorksheets(), strict: true);
+
+        if (is_int(value: $result)) {
             return $result;
         }
 
@@ -85,7 +87,7 @@ final class XLSX implements Contracts\XLSXInterface
     private function getWorksheetPaths(): array
     {
         if ([] === $this->worksheetPaths) {
-            $this->worksheetPaths = (new WorksheetReader(path: $this->archive->extract(filePath: self::WORKBOOK_PATH)))->getWorksheetPaths(relationships: $this->getRelationships());
+            $this->worksheetPaths = (new Worksheet(path: $this->archive->extract(filePath: self::WORKBOOK_PATH)))->getWorksheetPaths(relationships: $this->getRelationships());
         }
 
         return $this->worksheetPaths;

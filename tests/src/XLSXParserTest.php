@@ -41,7 +41,7 @@ class XLSXParserTest extends TestCase
     public function testOpenNotZip(): void
     {
         $this->expectException(exception: RuntimeException::class);
-        $workbook = (new XLSXParser())->open(path: dirname(path: __DIR__) . '/src/XLSXParserTest.php');
+        $workbook = (new XLSXParser())->open(path: __DIR__ . '/XLSXParserTest.php');
         $workbook->getIndex(name: 'worksheet');
     }
 

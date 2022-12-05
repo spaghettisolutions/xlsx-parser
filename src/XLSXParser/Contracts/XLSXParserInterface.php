@@ -2,7 +2,7 @@
 
 namespace Spaghetti\XLSXParser\Contracts;
 
-interface XLSXLoaderInterface
+interface XLSXParserInterface
 {
     public function open(string $path): XLSXInterface;
 }

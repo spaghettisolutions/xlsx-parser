@@ -20,7 +20,7 @@ final class SharedStrings extends AbstractXMLDictionary
 
         while ($xml->read()) {
             if (XMLReader::ELEMENT === $xml->nodeType) {
-                $this->process($xml);
+                $this->process(xml: $xml);
             }
         }
 

@@ -7,7 +7,7 @@ use XMLReader;
 /**
  * @internal
  */
-final class WorksheetReader extends AbstractXMLResource
+final class Worksheet extends AbstractXMLResource
 {
     public function getWorksheetPaths(Relationships $relationships): array
     {
