@@ -26,8 +26,7 @@ final class SharedStrings extends AbstractXMLDictionary
                         break;
                     case 't':
                         $this->values[$this->currentIndex] = trim(string: str_replace(search: "\u{a0}", replace: ' ', subject: $xml->readString()), characters: ' ');
-
-                        return;
+                        break;
                 }
             }
         }

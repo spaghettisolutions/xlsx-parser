@@ -37,8 +37,6 @@ final class Styles extends AbstractXMLDictionary
                     in_array(needle: $fmtId, haystack: $this->nativeDateFormats, strict: true) => self::FORMAT_DATE,
                     default => self::FORMAT_DEFAULT,
                 };
-
-                return;
             }
         }
 
