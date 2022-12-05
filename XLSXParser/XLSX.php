@@ -35,15 +35,15 @@ final class XLSX implements Contracts\XLSXInterface
         return array_keys(array: $this->getWorksheetPaths());
     }
 
-    public function createRowIterator(int $worksheetIndex, array $options = []): Iterator
+    public function getRows(int $index, array $options = []): Iterator
     {
         return new RowIterator(
             valueTransformer: $this->getValueTransformer(),
-            path: $this->archive->extract(filePath: array_values(array: $this->getWorksheetPaths())[$worksheetIndex]),
+            path: $this->archive->extract(filePath: array_values(array: $this->getWorksheetPaths())[$index]),
         );
     }
 
-    public function getWorksheetIndex(string $name): int
+    public function getIndex(string $name): int
     {
         if (is_int(value: $result = array_search(needle: $name, haystack: $this->getWorksheets(), strict: true))) {
             return $result;

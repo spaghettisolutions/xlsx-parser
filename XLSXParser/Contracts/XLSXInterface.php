@@ -6,9 +6,9 @@ use Iterator;
 
 interface XLSXInterface
 {
-    public function createRowIterator(int $worksheetIndex, array $options = []): Iterator;
+    public function getIndex(string $name): int;
 
-    public function getWorksheetIndex(string $name): int;
+    public function getRows(int $index, array $options = []): Iterator;
 
     public function getWorksheets(): array;
 }

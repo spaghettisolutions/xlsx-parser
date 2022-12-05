@@ -1,29 +1,42 @@
-# xlsx-parser
+<p align="center">
+  <a href="https://github.com/spaghettisolutions"><img src="https://avatars.githubusercontent.com/u/99179033?s=84&v=4"></a><br>
+</p>
 
-[![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
+<h1 align="center">XLSX Parser</h1>
 
+<p align="center">Very simple to implement xlsx parser to extract data from spreadsheets</p>
+
+What is it?
+---
+**XLSXParser** is blazingly fast xlsx parser for **php 8.1+**. It is made as a simple tool to get job done. No fancy options of any kind 
+and no need for any extra libraries other than need for `zip` and `xmlreader` php extensions.  
+
+---
+* Initialize class. 
+* Open workbook. 
+* Choose worksheet. 
+* And iterate through receiving each row as an array.
+
+---
 Installation
 ---
-
 The recommended way to install is via Composer:
 
 ```shell
 composer require spaghetti/xlsx-parser
 ```
-
-This package requires at least PHP version 8.1
-
-### Very simple to implement xlsx parser to extract data from spreadsheets
-
 Usage
 ---
+
 ```php
 use Spaghetti\XLSXParser;
 
 $workbook = (new XLSXParser())->open('workbook.xlsx');
-$index = $workbook->getWorksheetIndex('mysheet');
 
-foreach ($workbook->createRowIterator($index) as $values) {
+foreach ($workbook->getRows($workbook->getIndex('worksheet')) as $values) {
     var_dump($values);
 }
 ```
+
+---
+[![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
