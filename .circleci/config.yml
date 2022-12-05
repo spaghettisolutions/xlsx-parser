@@ -1,15 +1,17 @@
 version: 2.0
 jobs:
   build:
+    environment:
+      CC_TEST_REPORTER_ID: 4473901b40a4467ff2db5da9271671ef7545c987b38f5f1490ec254ebc3778e0
     docker:
-      - image: "mileschou/xdebug:8.1"
+      - image: "mileschou/xdebug:8.1-alpine"
     working_directory: ~/repo
     steps:
       - checkout
       - run:
           name: Setup dependencies
           command: |
-            sudo composer self-update
+            composer self-update
             composer install -n --prefer-dist
       - run:
           name: Setup Code Climate test-reporter
@@ -19,7 +21,7 @@ jobs:
       - run:
           name: Run tests
           command: |
-            sudo docker-php-ext-enable xdebug zip xmlreader
+            docker-php-ext-enable xdebug zip xmlreader
             ./cc-test-reporter before-build
             sudo vendor/bin/phpunit --coverage-clover clover.xml
             ./cc-test-reporter after-build --coverage-input-type clover --exit-code $?
