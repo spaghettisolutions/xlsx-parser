@@ -17,6 +17,8 @@ and no need for any extra libraries other than need for `zip` and `xmlreader` ph
 * Choose worksheet. 
 * And iterate through receiving each row as an array.
 
+[![Test Coverage](https://api.codeclimate.com/v1/badges/70a54d59d6b335ff303c/test_coverage)](https://codeclimate.com/github/spaghettisolutions/xlsx-parser/test_coverage)
+
 ---
 Installation
 ---
