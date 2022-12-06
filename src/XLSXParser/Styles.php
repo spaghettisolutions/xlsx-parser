@@ -25,14 +25,8 @@ final class Styles extends AbstractXMLDictionary
         $xml = $this->getXMLReader();
 
         while ($xml->read()) {
-            if ('cellXfs' === $xml->name) {
-                switch ($xml->nodeType) {
-                    case XMLReader::END_ELEMENT:
-                        break 2;
-                    case XMLReader::ELEMENT:
-                        $this->inXfs = true;
-                        continue 2;
-                }
+            if ($this->processCellXfs(xml: $xml)) {
+                continue;
             }
 
             $this->xfs(xml: $xml);
@@ -56,6 +50,22 @@ final class Styles extends AbstractXMLDictionary
         }
 
         return $this->processRewind(xml: $xml);
+    }
+
+    private function processCellXfs(XMLReader $xml): bool
+    {
+        if ('cellXfs' === $xml->name) {
+            switch ($xml->nodeType) {
+                case XMLReader::END_ELEMENT:
+                    return true;
+                case XMLReader::ELEMENT:
+                    $this->inXfs = true;
+
+                    return true;
+            }
+        }
+
+        return false;
     }
 
     private function processRewind(XMLReader $xml): XMLReader
