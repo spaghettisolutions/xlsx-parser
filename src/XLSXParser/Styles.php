@@ -52,22 +52,20 @@ final class Styles extends AbstractXMLDictionary
                 break;
             }
 
-            if (XMLReader::ELEMENT === $xml->nodeType) {
-                $this->process(xml: $xml);
-            }
+            $this->process(xml: $xml);
         }
 
-        $this->processRewind(xml: $xml);
-
-        return $xml;
+        return $this->processRewind(xml: $xml);
     }
 
-    private function processRewind(XMLReader &$xml): void
+    private function processRewind(XMLReader $xml): XMLReader
     {
         if ($this->needsRewind) {
             $xml->close();
             $xml = parent::createXMLReader();
         }
+
+        return $xml;
     }
 
     private function xfs(XMLReader $xml): void
@@ -79,11 +77,13 @@ final class Styles extends AbstractXMLDictionary
 
     private function process(XMLReader $xml): void
     {
-        match ($xml->name) {
-            'cellXfs' => $this->needsRewind = true,
-            'numFmt' => $this->numberFormats[$xml->getAttribute(name: 'numFmtId')] = $this->matchDateFormat(xml: $xml),
-            default => null,
-        };
+        if (XMLReader::ELEMENT === $xml->nodeType) {
+            match ($xml->name) {
+                'cellXfs' => $this->needsRewind = true,
+                'numFmt' => $this->numberFormats[$xml->getAttribute(name: 'numFmtId')] = $this->matchDateFormat(xml: $xml),
+                default => null,
+            };
+        }
     }
 
     private function matchDateFormat(XMLReader $xml): int
