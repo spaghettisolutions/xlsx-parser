@@ -42,10 +42,6 @@ final class Styles extends AbstractXMLDictionary
         $this->needsRewind = false;
 
         while ($xml->read()) {
-            if (XMLReader::END_ELEMENT === $xml->nodeType && 'numFmts' === $xml->name) {
-                break;
-            }
-
             $this->process(xml: $xml);
         }
 
@@ -89,8 +85,8 @@ final class Styles extends AbstractXMLDictionary
     {
         if (XMLReader::ELEMENT === $xml->nodeType) {
             match ($xml->name) {
-                'cellXfs' => $this->needsRewind = true,
                 'numFmt' => $this->numberFormats[$xml->getAttribute(name: 'numFmtId')] = $this->matchDateFormat(xml: $xml),
+                'cellXfs' => $this->needsRewind = true,
                 default => null,
             };
         }

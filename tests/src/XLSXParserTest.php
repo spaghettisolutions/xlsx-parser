@@ -26,6 +26,23 @@ class XLSXParserTest extends TestCase
         $this->assertEquals(expected: new DateTimeImmutable(datetime: '2022-12-05'), actual: $values[2][5]);
     }
 
+    public function testOpenCellXfs(): void
+    {
+        $workbook = (new XLSXParser())->open(path: dirname(path: __DIR__) . '/assets/samplefile.xlsx');
+        $this->assertEquals(expected: ['Sample', 'Cities', ], actual: $workbook->getWorksheets());
+        $values = [];
+
+        foreach ($workbook->getRows(index: $workbook->getIndex(name: 'Cities')) as $row) {
+            $values[] = $row;
+        }
+
+        foreach ($workbook->getRows(index: $workbook->getIndex(name: 'Sample')) as $row) {
+            $values[] = $row;
+        }
+
+        $this->assertCount(expectedCount: 12, haystack: $values);
+    }
+
     public function testOpenNotExists(): void
     {
         $this->expectException(exception: RuntimeException::class);
