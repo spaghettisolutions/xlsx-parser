@@ -11,14 +11,14 @@ use XMLReader;
 final class RowIterator implements Iterator
 {
     private ?Row $row = null;
-    private ?int $currentKey;
-    private ?int $index = null;
-    private ?string $style = null;
-    private ?string $type = null;
     private XMLReader $xml;
     private array $currentValue;
     private bool $valid;
+    private int $currentKey;
+    private int $index;
     private readonly Transformer\Column $columnTransformer;
+    private string $style;
+    private string $type;
 
     public function __construct(
         private readonly Transformer\Value $valueTransformer,
