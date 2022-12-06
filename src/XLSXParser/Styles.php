@@ -18,6 +18,7 @@ final class Styles extends AbstractXMLDictionary
     private array $nativeDateFormats = [14, 15, 16, 17, 18, 19, 20, 21, 22, ];
     private array $numberFormats = [];
     private bool $inXfs = false;
+    private bool $needsRewind;
 
     protected function readNext(): void
     {
@@ -44,23 +45,29 @@ final class Styles extends AbstractXMLDictionary
     protected function createXMLReader(): XMLReader
     {
         $xml = parent::createXMLReader();
-        $needsRewind = false;
+        $this->needsRewind = false;
 
         while ($xml->read()) {
             if (XMLReader::END_ELEMENT === $xml->nodeType && 'numFmts' === $xml->name) {
                 break;
             }
+
             if (XMLReader::ELEMENT === $xml->nodeType) {
-                $this->process(xml: $xml, needsRewind: $needsRewind);
+                $this->process(xml: $xml);
             }
         }
 
-        if ($needsRewind) {
+        $this->processRewind(xml: $xml);
+
+        return $xml;
+    }
+
+    private function processRewind(XMLReader &$xml): void
+    {
+        if ($this->needsRewind) {
             $xml->close();
             $xml = parent::createXMLReader();
         }
-
-        return $xml;
     }
 
     private function xfs(XMLReader $xml): void
@@ -70,23 +77,18 @@ final class Styles extends AbstractXMLDictionary
         }
     }
 
-    private function process(XMLReader $xml, bool &$needsRewind): void
+    private function process(XMLReader $xml): void
     {
-        switch ($xml->name) {
-            case 'numFmt':
-                $this->numberFormats[$xml->getAttribute(name: 'numFmtId')] = $this->matchDateFormat(xml: $xml);
-
-                return;
-            case 'cellXfs':
-                $needsRewind = true;
-
-                return;
-        }
+        match ($xml->name) {
+            'cellXfs' => $this->needsRewind = true,
+            'numFmt' => $this->numberFormats[$xml->getAttribute(name: 'numFmtId')] = $this->matchDateFormat(xml: $xml),
+            default => null,
+        };
     }
 
     private function matchDateFormat(XMLReader $xml): int
     {
-        return preg_match(pattern: '{^(\[\$[[:alpha:]]*-[0-9A-F]*\])*[hmsdy]}i', subject: $xml->getAttribute(name: 'formatCode'), ) ? self::FORMAT_DATE : self::FORMAT_DEFAULT;
+        return preg_match(pattern: '{^(\[\$[[:alpha:]]*-[0-9A-F]*\])*[hmsdy]}i', subject: $xml->getAttribute(name: 'formatCode')) ? self::FORMAT_DATE : self::FORMAT_DEFAULT;
     }
 
     private function getValue(int $fmtId): int
