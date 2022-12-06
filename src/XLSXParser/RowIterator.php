@@ -77,7 +77,7 @@ final class RowIterator implements Iterator
     private function processEndValue(): void
     {
         if ('row' === $this->xml->name) {
-            $currentValue = $this->row->getData();
+            $currentValue = $this->row?->getData();
             if ([] !== $currentValue) {
                 $this->currentValue = $currentValue;
                 $this->valid = true;

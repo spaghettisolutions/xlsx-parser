@@ -54,7 +54,7 @@ final class XLSX implements Contracts\XLSXInterface
         throw new InvalidArgumentException(message: sprintf('Invalid name: "%s"', $name));
     }
 
-    private function getRelationships(): ?Relationships
+    private function getRelationships(): Relationships
     {
         if (null === $this->relationships) {
             $this->relationships = new Relationships(path: $this->archive->extract(filePath: self::RELATIONSHIPS_PATH));
@@ -78,7 +78,7 @@ final class XLSX implements Contracts\XLSXInterface
     private function getSharedStrings(): SharedStrings
     {
         if (null === $this->sharedStrings) {
-            $this->sharedStrings = new SharedStrings(path: $this->archive->extract(filePath: $this->relationships->getSharedStringsPath()));
+            $this->sharedStrings = new SharedStrings(path: $this->archive->extract(filePath: $this->getRelationships()->getSharedStringsPath()));
         }
 
         return $this->sharedStrings;
@@ -96,7 +96,7 @@ final class XLSX implements Contracts\XLSXInterface
     private function getStyles(): ?Styles
     {
         if (null === $this->styles) {
-            $this->styles = new Styles(path: $this->archive->extract(filePath: $this->relationships->getStylesPath()));
+            $this->styles = new Styles(path: $this->archive->extract(filePath: $this->getRelationships()->getStylesPath()));
         }
 
         return $this->styles;
