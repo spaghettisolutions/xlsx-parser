@@ -4,6 +4,7 @@ namespace Spaghetti\XLSXParser\Transformer;
 
 use DateTimeImmutable;
 
+use function date_create_immutable_from_format;
 use function floor;
 use function gmdate;
 
@@ -22,6 +23,6 @@ final class Date
         $unix = ($value - $base) * 86400;
         $date = gmdate(format: $format, timestamp: $unix);
 
-        return DateTimeImmutable::createFromFormat(format: '!' . $format, datetime: $date);
+        return date_create_immutable_from_format(format: '!' . $format, datetime: $date);
     }
 }
