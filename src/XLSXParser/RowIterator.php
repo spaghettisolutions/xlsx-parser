@@ -12,7 +12,7 @@ use function count;
  */
 final class RowIterator implements Iterator
 {
-    private ?XMLReader $xml = null;
+    private XMLReader $xml;
     private array $currentValue;
     private bool $valid;
     private ?int $currentKey;
@@ -45,19 +45,13 @@ final class RowIterator implements Iterator
         while ($this->xml->read()) {
             if (XMLReader::ELEMENT === $this->xml->nodeType) {
                 $this->process(columnIndex: $columnIndex, currentKey: $currentKey, row: $row, type: $type, style: $style);
-
                 continue;
             }
 
             if (XMLReader::END_ELEMENT === $this->xml->nodeType) {
                 switch ($this->xml->name) {
                     case 'row':
-                        $currentValue = $row->getData();
-                        if (count(value: $currentValue)) {
-                            $this->currentKey = $currentKey;
-                            $this->currentValue = $currentValue;
-                            $this->valid = true;
-
+                        if ($this->processEnd(row: $row, currentKey: $currentKey)) {
                             return;
                         }
                         break;
@@ -70,7 +64,6 @@ final class RowIterator implements Iterator
 
     public function rewind(): void
     {
-        $this->xml?->close();
         $xml = new XMLReader();
 
         $this->xml = false === $xml->open(uri: $this->path) ? null : $xml;
@@ -81,6 +74,20 @@ final class RowIterator implements Iterator
     public function valid(): bool
     {
         return $this->valid;
+    }
+
+    private function processEnd(?Row &$row, ?int &$currentKey): bool
+    {
+        $currentValue = $row->getData();
+        if (count(value: $currentValue)) {
+            $this->currentKey = $currentKey;
+            $this->currentValue = $currentValue;
+            $this->valid = true;
+
+            return true;
+        }
+
+        return false;
     }
 
     private function process(?int &$columnIndex, ?int &$currentKey, ?Row &$row, ?string &$type, ?string &$style): void
@@ -101,8 +108,8 @@ final class RowIterator implements Iterator
                     value: $this->valueTransformer->transform(value: $this->xml->readString(), type: $type, style: $style),
                 );
                 break;
-            case 'is':
-                $row->addValue(columnIndex: $columnIndex, value: $this->xml->readString());
+            default:
+                $row?->addValue(columnIndex: $columnIndex, value: $this->xml->readString());
                 break;
         }
     }

@@ -8,16 +8,19 @@
 
 What is it?
 ---
-**XLSXParser** is blazingly fast xlsx parser for **php 8.1+**. It is made as a simple tool to get job done. No fancy options of any kind 
-and no need for any extra libraries other than need for `zip` and `xmlreader` php extensions.  
-
----
-* Initialize class. 
-* Open workbook. 
-* Choose worksheet. 
-* And iterate through receiving each row as an array.
+**XLSXParser** is blazingly fast xlsx parser for **php 8.1+**. It is made as a simple tool to get job done. No fancy options of any kind
+and no need for any extra libraries other than need for `zip` and `xmlreader` php extensions.
 
 [![Test Coverage](https://api.codeclimate.com/v1/badges/70a54d59d6b335ff303c/test_coverage)](https://codeclimate.com/github/spaghettisolutions/xlsx-parser/test_coverage)
+[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/spaghettisolutions/xlsx-parser/badges/quality-score.png?b=spaghetti)](https://scrutinizer-ci.com/g/spaghettisolutions/xlsx-parser/?branch=spaghetti)
+[![Build Status](https://scrutinizer-ci.com/g/spaghettisolutions/xlsx-parser/badges/build.png?b=spaghetti)](https://scrutinizer-ci.com/g/spaghettisolutions/xlsx-parser/build-status/spaghetti)
+
+
+---
+* Initialize class.
+* Open workbook.
+* Choose worksheet.
+* And iterate through receiving each row as an array.
 
 ---
 Installation
@@ -35,8 +38,8 @@ use Spaghetti\XLSXParser;
 
 $workbook = (new XLSXParser())->open('workbook.xlsx');
 
-foreach ($workbook->getRows($workbook->getIndex('worksheet')) as $values) {
-    var_dump($values);
+foreach ($workbook->getRows($workbook->getIndex('worksheet')) as $key => $values) {
+    var_dump($key, $values);
 }
 ```
 

@@ -2,6 +2,7 @@
 
 namespace Spaghetti\Tests;
 
+use DateTimeImmutable;
 use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
@@ -21,7 +22,8 @@ class XLSXParserTest extends TestCase
         }
 
         $this->assertCount(expectedCount: 201, haystack: $values);
-        $this->assertEquals('Alfred', $values[6][0]);
+        $this->assertEquals(expected: 'Alfred', actual: $values[6][0]);
+        $this->assertEquals(expected: new DateTimeImmutable(datetime: '2022-12-05'), actual: $values[2][5]);
     }
 
     public function testOpenNotExists(): void
@@ -45,10 +47,17 @@ class XLSXParserTest extends TestCase
         $workbook->getIndex(name: 'worksheet');
     }
 
-    public function testOpenNotXlsx(): void
+    public function testOpenNotXlsxZip(): void
     {
         $this->expectException(exception: InvalidArgumentException::class);
         $workbook = (new XLSXParser())->open(path: dirname(path: __DIR__) . '/assets/assets.zip');
+        $workbook->getIndex(name: 'worksheet');
+    }
+
+    public function testOpenNotXlsxXml(): void
+    {
+        $this->expectException(exception: RuntimeException::class);
+        $workbook = (new XLSXParser())->open(path: dirname(path: __DIR__) . '/assets/test.xml');
         $workbook->getIndex(name: 'worksheet');
     }
 }

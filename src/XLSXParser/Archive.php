@@ -5,6 +5,7 @@ namespace Spaghetti\XLSXParser;
 use FilesystemIterator;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
+use ReflectionClass;
 use RuntimeException;
 use ZipArchive;
 
@@ -94,31 +95,13 @@ final class Archive
 
     private function getErrorMessage(int $errorCode): string
     {
-        return match ($errorCode) {
-            ZipArchive::ER_CHANGED => 'Entry has been changed',
-            ZipArchive::ER_CLOSE => 'Closing zip archive failed',
-            ZipArchive::ER_COMPNOTSUPP => 'Compression method not supported',
-            ZipArchive::ER_CRC => 'CRC error',
-            ZipArchive::ER_DELETED => 'Entry has been deleted',
-            ZipArchive::ER_EOF => 'Premature EOF',
-            ZipArchive::ER_EXISTS => 'File already exists',
-            ZipArchive::ER_INCONS => 'Inconsistent zip archive',
-            ZipArchive::ER_INTERNAL => 'Internal error',
-            ZipArchive::ER_INVAL => 'Invalid argument',
-            ZipArchive::ER_MEMORY => 'Malloc failure',
-            ZipArchive::ER_MULTIDISK => 'Multi-disk zip archives not supported',
-            ZipArchive::ER_NOENT => 'No such file',
-            ZipArchive::ER_NOZIP => 'Not a zip archive',
-            ZipArchive::ER_OPEN => 'Can\'t open file',
-            ZipArchive::ER_READ => 'Read error',
-            ZipArchive::ER_REMOVE => 'Can\'t remove file',
-            ZipArchive::ER_RENAME => 'Renaming temporary file failed',
-            ZipArchive::ER_SEEK => 'Seek error',
-            ZipArchive::ER_TMPOPEN => 'Failure to create temporary file',
-            ZipArchive::ER_WRITE => 'Write error',
-            ZipArchive::ER_ZIPCLOSED => 'Zip archive is closed',
-            ZipArchive::ER_ZLIB => 'Zlib error',
-            default => sprintf('An unknown error has occurred: %d', $errorCode),
-        };
+        return sprintf('An error has occured: %s::%s (%d)', ZipArchive::class, $this->getZipErrorString(value: $errorCode), $errorCode);
+    }
+
+    private function getZipErrorString(int $value): string
+    {
+        $map = array_flip(array: (new ReflectionClass(objectOrClass: ZipArchive::class))->getConstants());
+
+        return array_key_exists(key: $value, array: $map) ? $map[$value] : 'UNKNOWN';
     }
 }

@@ -34,9 +34,7 @@ final class Styles extends AbstractXMLDictionary
                 }
             }
 
-            if ($this->inXfs && XMLReader::ELEMENT === $xml->nodeType && 'xf' === $xml->name) {
-                $this->values[] = $this->getValue(fmtId: (int) $xml->getAttribute(name: 'numFmtId'));
-            }
+            $this->xfs(xml: $xml);
         }
 
         $this->valid = false;
@@ -65,15 +63,18 @@ final class Styles extends AbstractXMLDictionary
         return $xml;
     }
 
+    private function xfs(XMLReader $xml): void
+    {
+        if ($this->inXfs && XMLReader::ELEMENT === $xml->nodeType && 'xf' === $xml->name) {
+            $this->values[] = $this->getValue(fmtId: (int) $xml->getAttribute(name: 'numFmtId'));
+        }
+    }
+
     private function process(XMLReader $xml, bool &$needsRewind): void
     {
         switch ($xml->name) {
             case 'numFmt':
-                $this->numberFormats[$xml->getAttribute(name: 'numFmtId')] =
-                    preg_match(
-                        pattern: '{^(\[\$[[:alpha:]]*-[0-9A-F]*\])*[hmsdy]}i',
-                        subject: $xml->getAttribute(name: 'formatCode'),
-                    ) ? self::FORMAT_DATE : self::FORMAT_DEFAULT;
+                $this->numberFormats[$xml->getAttribute(name: 'numFmtId')] = $this->matchDateFormat(xml: $xml);
 
                 return;
             case 'cellXfs':
@@ -83,11 +84,16 @@ final class Styles extends AbstractXMLDictionary
         }
     }
 
+    private function matchDateFormat(XMLReader $xml): int
+    {
+        return preg_match(pattern: '{^(\[\$[[:alpha:]]*-[0-9A-F]*\])*[hmsdy]}i', subject: $xml->getAttribute(name: 'formatCode'), ) ? self::FORMAT_DATE : self::FORMAT_DEFAULT;
+    }
+
     private function getValue(int $fmtId): int
     {
         return match (true) {
-            isset($this->numberFormats[$fmtId]) => $this->numberFormats[$fmtId],
             in_array(needle: $fmtId, haystack: $this->nativeDateFormats, strict: true) => self::FORMAT_DATE,
+            isset($this->numberFormats[$fmtId]) => $this->numberFormats[$fmtId],
             default => self::FORMAT_DEFAULT,
         };
     }
