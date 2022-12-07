@@ -16,10 +16,7 @@ final class Worksheet extends AbstractXMLResource
 
         while ($xml->read()) {
             if (XMLReader::ELEMENT === $xml->nodeType && 'sheet' === $xml->name) {
-                $rId = $xml->getAttributeNs(
-                    name: 'id',
-                    namespace: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships',
-                );
+                $rId = $xml->getAttributeNs(name: 'id', namespace: 'http://schemas.openxmlformats.org/officeDocument/2006/relationships');
                 $paths[$xml->getAttribute(name: 'name')] = $relationships->getWorksheetPath(rId: $rId);
             }
         }

@@ -2,9 +2,8 @@
 
 namespace Spaghetti\XLSXParser;
 
-use Error;
-use Exception;
 use InvalidArgumentException;
+use Throwable;
 use XMLReader;
 
 use function sprintf;
@@ -27,29 +26,28 @@ abstract class AbstractXMLResource
 
     protected function getXMLReader(): XMLReader
     {
-        if (null === $this->xml) {
-            $this->xml = $this->createXMLReader();
-        }
-
-        return $this->xml;
+        return $this->xml ??= $this->createXMLReader();
     }
 
     protected function createXMLReader(): XMLReader
     {
-        $xml = new XMLReader();
-
-        try {
-            $xml->open(uri: $this->path);
-        } catch (Exception|Error $exception) {
-            throw new InvalidArgumentException(message: sprintf('Not a XLSX file: %s', $this->path), previous: $exception);
-        }
-
-        return $xml;
+        return $this->validateXMLReader(xml: new XMLReader());
     }
 
     protected function closeXMLReader(): void
     {
         $this->xml?->close();
         $this->xml = null;
+    }
+
+    private function validateXMLReader(XMLReader $xml): XMLReader
+    {
+        try {
+            $xml->open(uri: $this->path);
+        } catch (Throwable $throwable) {
+            throw new InvalidArgumentException(message: sprintf('Not a XLSX file: %s', $this->path), previous: $throwable);
+        }
+
+        return $xml;
     }
 }
