@@ -30,13 +30,10 @@ final class SharedStrings extends AbstractXMLDictionary
 
     private function process(XMLReader $xml): void
     {
-        switch ($xml->name) {
-            case 'si':
-                $this->currentIndex++;
-                break;
-            case 't':
-                $this->values[$this->currentIndex] = trim(string: str_replace(search: "\u{a0}", replace: ' ', subject: $xml->readString()), characters: ' ');
-                break;
-        }
+        match ($xml->name) {
+            'si' => $this->currentIndex++,
+            't' => $this->values[$this->currentIndex] = trim(string: str_replace(search: "\u{a0}", replace: ' ', subject: $xml->readString()), characters: ' '),
+            default => null,
+        };
     }
 }

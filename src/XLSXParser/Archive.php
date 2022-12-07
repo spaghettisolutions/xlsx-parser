@@ -64,10 +64,8 @@ final class Archive
 
     private function closeArchive(): void
     {
-        if (null !== $this->zip) {
-            $this->zip->close();
-            $this->zip = null;
-        }
+        $this->zip?->close();
+        $this->zip = null;
     }
 
     private function deleteTmp(): void

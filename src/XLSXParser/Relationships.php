@@ -47,16 +47,11 @@ final class Relationships extends AbstractXMLResource
 
     private function storeRelationshipTarget(string $type, string $rId, string $target): void
     {
-        switch ($type) {
-            case 'worksheet':
-                $this->workSheetPaths[$rId] = $target;
-                break;
-            case 'styles':
-                $this->stylePath = $target;
-                break;
-            case 'sharedStrings':
-                $this->sharedStringPath = $target;
-                break;
-        }
+        match ($type) {
+            'worksheet' => $this->workSheetPaths[$rId] = $target,
+            'styles' => $this->stylePath = $target,
+            'sharedStrings' => $this->sharedStringPath = $target,
+            default => null,
+        };
     }
 }

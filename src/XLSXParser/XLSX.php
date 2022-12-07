@@ -16,18 +16,14 @@ use function sprintf;
  */
 final class XLSX implements Contracts\XLSXInterface
 {
-    private const RELATIONSHIPS_PATH = 'xl/_rels/workbook.xml.rels';
-    private const WORKBOOK_PATH = 'xl/workbook.xml';
-
     private ?Relationships $relationships = null;
     private ?SharedStrings $sharedStrings = null;
     private ?Styles $styles = null;
     private ?Transformer\Value $valueTransformer = null;
-    private array $worksheetPaths = [];
+    private ?array $worksheetPaths = null;
 
-    public function __construct(
-        private readonly Archive $archive,
-    ) {
+    public function __construct(private readonly Archive $archive)
+    {
     }
 
     public function getWorksheets(): array
@@ -47,58 +43,34 @@ final class XLSX implements Contracts\XLSXInterface
     {
         $result = array_search(needle: $name, haystack: $this->getWorksheets(), strict: true);
 
-        if (is_int(value: $result)) {
-            return $result;
-        }
-
-        throw new InvalidArgumentException(message: sprintf('Invalid name: "%s"', $name));
+        return match (is_int(value: $result)) {
+            true => $result,
+            default => throw new InvalidArgumentException(message: sprintf('Invalid name: "%s"', $name)),
+        };
     }
 
     private function getRelationships(): Relationships
     {
-        if (null === $this->relationships) {
-            $this->relationships = new Relationships(path: $this->archive->extract(filePath: self::RELATIONSHIPS_PATH));
-        }
-
-        return $this->relationships;
+        return $this->relationships ??= new Relationships(path: $this->archive->extract(filePath: 'xl/_rels/workbook.xml.rels'));
     }
 
     private function getValueTransformer(): Transformer\Value
     {
-        if (null === $this->valueTransformer) {
-            $this->valueTransformer = new Transformer\Value(
-                sharedStrings: $this->getSharedStrings(),
-                styles: $this->getStyles(),
-            );
-        }
-
-        return $this->valueTransformer;
+        return $this->valueTransformer ??= new Transformer\Value(sharedStrings: $this->getSharedStrings(), styles: $this->getStyles());
     }
 
     private function getSharedStrings(): SharedStrings
     {
-        if (null === $this->sharedStrings) {
-            $this->sharedStrings = new SharedStrings(path: $this->archive->extract(filePath: $this->getRelationships()->getSharedStringsPath()));
-        }
-
-        return $this->sharedStrings;
+        return $this->sharedStrings ??= new SharedStrings(path: $this->archive->extract(filePath: $this->getRelationships()->getSharedStringsPath()));
     }
 
     private function getWorksheetPaths(): array
     {
-        if ([] === $this->worksheetPaths) {
-            $this->worksheetPaths = (new Worksheet(path: $this->archive->extract(filePath: self::WORKBOOK_PATH)))->getWorksheetPaths(relationships: $this->getRelationships());
-        }
-
-        return $this->worksheetPaths;
+        return $this->worksheetPaths ??= (new Worksheet(path: $this->archive->extract(filePath: 'xl/workbook.xml')))->getWorksheetPaths(relationships: $this->getRelationships());
     }
 
     private function getStyles(): ?Styles
     {
-        if (null === $this->styles) {
-            $this->styles = new Styles(path: $this->archive->extract(filePath: $this->getRelationships()->getStylesPath()));
-        }
-
-        return $this->styles;
+        return $this->styles ??= new Styles(path: $this->archive->extract(filePath: $this->getRelationships()->getStylesPath()));
     }
 }

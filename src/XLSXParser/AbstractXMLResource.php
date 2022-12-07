@@ -49,9 +49,7 @@ abstract class AbstractXMLResource
 
     protected function closeXMLReader(): void
     {
-        if (null !== $this->xml) {
-            $this->xml->close();
-            $this->xml = null;
-        }
+        $this->xml?->close();
+        $this->xml = null;
     }
 }
