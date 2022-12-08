@@ -4,7 +4,7 @@
 
 <h1 align="center">XLSX Parser</h1>
 
-<p align="center">Very simple to implement xlsx parser to extract data from spreadsheets</p>
+<p align="center">Very simple to implement xlsx parser to extract data from spreadsheets for php 8.1+ </p>
 
 What is it?
 ---
