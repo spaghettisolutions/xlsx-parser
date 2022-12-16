@@ -2,11 +2,10 @@
 
 namespace Spaghetti\XLSXParser;
 
-use FilesystemIterator;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use ReflectionClass;
-use RuntimeException;
+use FilesystemIterator as FI;
+use RecursiveDirectoryIterator as RDI;
+use RecursiveIteratorIterator as RII;
+use Spaghetti\XLSXParser\Exception\InvalidArchiveException;
 use ZipArchive;
 
 use function file_exists;
@@ -51,11 +50,11 @@ final class Archive
     {
         if (null === $this->zip) {
             $this->zip = new ZipArchive();
-            $errorCode = $this->zip->open(filename: $this->archivePath);
+            $error = $this->zip->open(filename: $this->archivePath);
 
-            if (true !== $errorCode) {
+            if (true !== $error) {
                 $this->zip = null;
-                throw new RuntimeException(message: 'Error opening file: ' . $this->getErrorMessage(errorCode: $errorCode));
+                throw new InvalidArchiveException(code: $error);
             }
         }
 
@@ -74,10 +73,7 @@ final class Archive
             return;
         }
 
-        $files = new RecursiveIteratorIterator(
-            iterator: new RecursiveDirectoryIterator(directory: $this->tmpPath, flags: FilesystemIterator::SKIP_DOTS),
-            mode: RecursiveIteratorIterator::CHILD_FIRST,
-        );
+        $files = new RII(iterator: new RDI(directory: $this->tmpPath, flags: FI::SKIP_DOTS), mode: RII::CHILD_FIRST, );
 
         foreach ($files as $file) {
             if ($file->isDir()) {
@@ -89,17 +85,5 @@ final class Archive
         }
 
         rmdir(directory: $this->tmpPath);
-    }
-
-    private function getErrorMessage(int $errorCode): string
-    {
-        return sprintf('An error has occured: %s::%s (%d)', ZipArchive::class, $this->getZipErrorString(value: $errorCode), $errorCode);
-    }
-
-    private function getZipErrorString(int $value): string
-    {
-        $map = array_flip(array: (new ReflectionClass(objectOrClass: ZipArchive::class))->getConstants());
-
-        return array_key_exists(key: $value, array: $map) ? $map[$value] : 'UNKNOWN';
     }
 }

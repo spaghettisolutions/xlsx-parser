@@ -2,14 +2,13 @@
 
 namespace Spaghetti\XLSXParser;
 
-use InvalidArgumentException;
 use Iterator;
+use Spaghetti\XLSXParser\Exception\InvalidIndexException;
 
 use function array_keys;
 use function array_search;
 use function array_values;
 use function is_int;
-use function sprintf;
 
 /**
  * @internal
@@ -45,7 +44,7 @@ final class XLSX implements Contracts\XLSXInterface
 
         return match (is_int(value: $result)) {
             true => $result,
-            default => throw new InvalidArgumentException(message: sprintf('Invalid name: "%s"', $name)),
+            default => throw new InvalidIndexException(name: $name),
         };
     }
 

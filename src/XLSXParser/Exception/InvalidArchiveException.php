@@ -1,0 +1,32 @@
+<?php declare(strict_types = 1);
+
+namespace Spaghetti\XLSXParser\Exception;
+
+use ReflectionClass;
+use RuntimeException;
+use Throwable;
+use ZipArchive;
+
+use function array_flip;
+use function array_key_exists;
+use function sprintf;
+
+class InvalidArchiveException extends RuntimeException
+{
+    public function __construct(int $code, ?Throwable $previous = null)
+    {
+        parent::__construct(message: 'Error opening file: ' . $this->getErrorMessage(errorCode: $code), code: 0, previous: $previous);
+    }
+
+    private function getErrorMessage(int $errorCode): string
+    {
+        return sprintf('An error has occured: %s::%s (%d)', ZipArchive::class, $this->getZipErrorString(value: $errorCode), $errorCode);
+    }
+
+    private function getZipErrorString(int $value): string
+    {
+        $map = array_flip(array: (new ReflectionClass(objectOrClass: ZipArchive::class))->getConstants());
+
+        return array_key_exists(key: $value, array: $map) ? $map[$value] : 'UNKNOWN';
+    }
+}

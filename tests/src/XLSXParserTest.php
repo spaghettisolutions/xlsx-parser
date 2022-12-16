@@ -3,10 +3,11 @@
 namespace Spaghetti\Tests;
 
 use DateTimeImmutable;
-use InvalidArgumentException;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 use Spaghetti\XLSXParser;
+use Spaghetti\XLSXParser\Exception\InvalidArchiveException;
+use Spaghetti\XLSXParser\Exception\InvalidIndexException;
+use Spaghetti\XLSXParser\Exception\InvalidXLSXFileException;
 
 use function dirname;
 
@@ -45,35 +46,35 @@ class XLSXParserTest extends TestCase
 
     public function testOpenNotExists(): void
     {
-        $this->expectException(exception: RuntimeException::class);
+        $this->expectException(exception: InvalidArchiveException::class);
         $workbook = (new XLSXParser())->open(path: dirname(path: __DIR__) . '/assets/workbook2.xlsx');
         $this->assertEquals(expected: ['worksheet', ], actual: $workbook->getWorksheets());
     }
 
     public function testOpenWrongIndex(): void
     {
-        $this->expectException(exception: InvalidArgumentException::class);
+        $this->expectException(exception: InvalidIndexException::class);
         $workbook = (new XLSXParser())->open(path: dirname(path: __DIR__) . '/assets/workbook.xlsx');
         $workbook->getIndex(name: 'worksheet2');
     }
 
     public function testOpenNotZip(): void
     {
-        $this->expectException(exception: RuntimeException::class);
+        $this->expectException(exception: InvalidArchiveException::class);
         $workbook = (new XLSXParser())->open(path: __DIR__ . '/XLSXParserTest.php');
         $workbook->getIndex(name: 'worksheet');
     }
 
     public function testOpenNotXlsxZip(): void
     {
-        $this->expectException(exception: InvalidArgumentException::class);
+        $this->expectException(exception: InvalidXLSXFileException::class);
         $workbook = (new XLSXParser())->open(path: dirname(path: __DIR__) . '/assets/assets.zip');
         $workbook->getIndex(name: 'worksheet');
     }
 
     public function testOpenNotXlsxXml(): void
     {
-        $this->expectException(exception: RuntimeException::class);
+        $this->expectException(exception: InvalidArchiveException::class);
         $workbook = (new XLSXParser())->open(path: dirname(path: __DIR__) . '/assets/test.xml');
         $workbook->getIndex(name: 'worksheet');
     }

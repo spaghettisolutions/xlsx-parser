@@ -2,11 +2,9 @@
 
 namespace Spaghetti\XLSXParser;
 
-use InvalidArgumentException;
+use Spaghetti\XLSXParser\Exception\InvalidXLSXFileException;
 use Throwable;
 use XMLReader;
-
-use function sprintf;
 
 /**
  * @internal
@@ -45,7 +43,7 @@ abstract class AbstractXMLResource
         try {
             $xml->open(uri: $this->path);
         } catch (Throwable $throwable) {
-            throw new InvalidArgumentException(message: sprintf('Not a XLSX file: %s', $this->path), previous: $throwable);
+            throw new InvalidXLSXFileException(path: $this->path, previous: $throwable);
         }
 
         return $xml;
