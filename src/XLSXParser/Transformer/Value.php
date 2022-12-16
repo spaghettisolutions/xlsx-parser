@@ -28,21 +28,21 @@ final class Value
         $this->dateTransformer = $dateTransformer ?? new Date();
     }
 
-    public function transform(string $value, string $type, string $style): string|int|bool|DateTimeImmutable
+    public function transform(string $value, string $type, string $style): bool|DateTimeImmutable|float|int|string
     {
         return match ($type) {
             self::TYPE_BOOL => filter_var(value: $value, filter: FILTER_VALIDATE_BOOL),
             self::TYPE_SHARED_STRING => trim(string: $this->sharedStrings->get(index: (int) $value)),
-            self::TYPE_EMPTY, self::TYPE_NUMBER => $this->transformNumber(style: $style, value: (int) $value),
+            self::TYPE_EMPTY, self::TYPE_NUMBER => $this->transformNumber(style: $style, value: $value),
             default => trim(string: $value),
         };
     }
 
-    private function transformNumber(string $style, int $value): DateTimeImmutable|int
+    private function transformNumber(string $style, mixed $value): DateTimeImmutable|float|int
     {
         return match (true) {
-            $style && Styles::FORMAT_DATE === $this->styles->get(index: (int) $style) => $this->dateTransformer->transform(value: $value),
-            default => $value,
+            $style && Styles::FORMAT_DATE === $this->styles->get(index: (int) $style) => $this->dateTransformer->transform(value: (int) $value),
+            default => preg_match(pattern: '/^\d+\.\d+$/', subject: $value) ? (float) $value : (int) $value,
         };
     }
 }
