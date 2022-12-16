@@ -51,14 +51,11 @@ final class Styles extends AbstractXMLDictionary
     private function processCellXfs(XMLReader $xml): bool
     {
         if ('cellXfs' === $xml->name) {
-            switch ($xml->nodeType) {
-                case XMLReader::END_ELEMENT:
-                    return true;
-                case XMLReader::ELEMENT:
-                    $this->inXfs = true;
-
-                    return true;
-            }
+            return match ($xml->nodeType) {
+                XMLReader::END_ELEMENT => true,
+                XMLReader::ELEMENT => $this->inXfs = true,
+                default => false,
+            };
         }
 
         return false;

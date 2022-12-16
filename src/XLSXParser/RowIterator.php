@@ -112,10 +112,7 @@ final class RowIterator implements Iterator
 
     private function processValue(): void
     {
-        $this->row?->addValue(
-            columnIndex: $this->index,
-            value: $this->valueTransformer->transform(value: $this->xml->readString(), type: $this->type, style: $this->style),
-        );
+        $this->row?->addValue(columnIndex: $this->index, value: $this->valueTransformer->transform(value: $this->xml->readString(), type: $this->type, style: $this->style), );
     }
 
     private function processDefault(): void

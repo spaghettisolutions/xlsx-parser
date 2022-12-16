@@ -3,6 +3,7 @@
 namespace Spaghetti\XLSXParser\Exception;
 
 use ReflectionClass;
+use ReflectionProperty;
 use RuntimeException;
 use Throwable;
 use ZipArchive;
@@ -25,7 +26,7 @@ class InvalidArchiveException extends RuntimeException
 
     private function getZipErrorString(int $value): string
     {
-        $map = array_flip(array: (new ReflectionClass(objectOrClass: ZipArchive::class))->getConstants());
+        $map = array_flip(array: (new ReflectionClass(objectOrClass: ZipArchive::class))->getConstants(filter: ReflectionProperty::IS_PUBLIC));
 
         return array_key_exists(key: $value, array: $map) ? $map[$value] : 'UNKNOWN';
     }

@@ -32,10 +32,7 @@ final class XLSX implements Contracts\XLSXInterface
 
     public function getRows(int $index): Iterator
     {
-        return new RowIterator(
-            valueTransformer: $this->getValueTransformer(),
-            path: $this->archive->extract(filePath: array_values(array: $this->getWorksheetPaths())[$index]),
-        );
+        return new RowIterator(valueTransformer: $this->getValueTransformer(), path: $this->archive->extract(filePath: array_values(array: $this->getWorksheetPaths())[$index]), );
     }
 
     public function getIndex(string $name): int
