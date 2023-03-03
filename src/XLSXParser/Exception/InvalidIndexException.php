@@ -11,6 +11,6 @@ class InvalidIndexException extends InvalidArgumentException
 {
     public function __construct(string $name, ?Throwable $previous = null)
     {
-        parent::__construct(message: sprintf('Invalid name: "%s"', $name), code: 0, previous: $previous);
+        parent::__construct(message: sprintf('Invalid name: "%s"', $name), previous: $previous);
     }
 }

@@ -16,7 +16,7 @@ class InvalidArchiveException extends RuntimeException
 {
     public function __construct(int $code, ?Throwable $previous = null)
     {
-        parent::__construct(message: 'Error opening file: ' . $this->getErrorMessage(errorCode: $code), code: 0, previous: $previous);
+        parent::__construct(message: 'Error opening file: ' . $this->getErrorMessage(errorCode: $code), previous: $previous);
     }
 
     private function getErrorMessage(int $errorCode): string

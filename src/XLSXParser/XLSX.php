@@ -65,7 +65,7 @@ final class XLSX implements Contracts\XLSXInterface
         return $this->worksheetPaths ??= (new Worksheet(path: $this->archive->extract(filePath: 'xl/workbook.xml')))->getWorksheetPaths(relationships: $this->getRelationships());
     }
 
-    private function getStyles(): ?Styles
+    private function getStyles(): Styles
     {
         return $this->styles ??= new Styles(path: $this->archive->extract(filePath: $this->getRelationships()->getStylesPath()));
     }
