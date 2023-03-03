@@ -42,6 +42,7 @@ abstract class AbstractXMLResource
     {
         try {
             $xml->open(uri: $this->path);
+            $xml->read();
         } catch (Throwable $throwable) {
             throw new InvalidXLSXFileException(path: $this->path, previous: $throwable);
         }

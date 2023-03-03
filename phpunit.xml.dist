@@ -1,21 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <phpunit
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/9.5/phpunit.xsd"
-         backupGlobals="false"
-         bootstrap="vendor/autoload.php"
-         cacheResult="false"
-         colors="true"
-         failOnRisky="true"
-         failOnWarning="true"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.0/phpunit.xsd"
+    backupGlobals="false"
+    bootstrap="vendor/autoload.php"
+    cacheResult="false"
+    colors="true"
+    failOnRisky="true"
+    failOnWarning="true"
 >
     <testsuites>
         <testsuite name="default">
             <directory>tests/src</directory>
         </testsuite>
     </testsuites>
-
-    <coverage cacheDirectory=".phpunit.cache/code-coverage" processUncoveredFiles="true">
+    <coverage>
         <include>
             <directory suffix=".php">src</directory>
         </include>
@@ -23,5 +22,8 @@
             <directory>./tests/</directory>
             <directory>./vendor/</directory>
         </exclude>
+        <report>
+            <html outputDirectory=".github/coverage" />
+        </report>
     </coverage>
 </phpunit>
