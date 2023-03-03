@@ -22,8 +22,5 @@
             <directory>./tests/</directory>
             <directory>./vendor/</directory>
         </exclude>
-        <report>
-            <html outputDirectory=".github/coverage" />
-        </report>
     </coverage>
 </phpunit>
