@@ -41,7 +41,7 @@ abstract class AbstractXMLResource
     private function validateXMLReader(XMLReader $xml): XMLReader
     {
         try {
-            $xml->open(uri: $this->path);
+            @$xml->open(uri: $this->path);
             $xml->read();
         } catch (Throwable $throwable) {
             throw new InvalidXLSXFileException(path: $this->path, previous: $throwable);
