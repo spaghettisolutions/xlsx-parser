@@ -14,6 +14,7 @@ return (new Config())
         '@PHP80Migration:risky' => true,
         '@PHP81Migration' => true,
         '@PHP82Migration' => true,
+        '@PHPUnit100Migration:risky' => true,
         '@Symfony' => true,
         '@Symfony:risky' => true,
         'binary_operator_spaces' => true,
