@@ -4,7 +4,7 @@ namespace Spaghetti\XLSXParser;
 
 use XMLReader;
 
-use function str_replace;
+use function strtr;
 use function trim;
 
 /**
@@ -32,7 +32,7 @@ final class SharedStrings extends AbstractXMLDictionary
     {
         match ($xml->name) {
             'si' => $this->currentIndex++,
-            't' => $this->values[$this->currentIndex] = trim(string: str_replace(search: "\u{a0}", replace: ' ', subject: $xml->readString()), characters: ' '),
+            't' => $this->values[$this->currentIndex] = trim(string: strtr(string: $xml->readString(), from: "\u{a0}", to: ' '), characters: ' '),
             default => null,
         };
     }
