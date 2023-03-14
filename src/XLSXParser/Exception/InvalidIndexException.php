@@ -7,7 +7,10 @@ use Throwable;
 
 use function sprintf;
 
-class InvalidIndexException extends InvalidArgumentException
+/**
+ * @internal
+ */
+final class InvalidIndexException extends InvalidArgumentException
 {
     public function __construct(string $name, ?Throwable $previous = null)
     {

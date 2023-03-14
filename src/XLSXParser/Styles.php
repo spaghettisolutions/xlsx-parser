@@ -13,7 +13,13 @@ use function preg_match;
 final class Styles extends AbstractXMLDictionary
 {
     public const FORMAT_DATE = 1;
+
     private const FORMAT_DEFAULT = 0;
+    private const CELL_XFS = 'cellXfs';
+    private const NUM_FORMAT = 'numFmt';
+    private const NUM_FORMAT_ID = 'numFmtId';
+    private const FORMAT_CODE = 'formatCode';
+    private const XF = 'xf';
 
     private array $nativeDateFormats = [14, 15, 16, 17, 18, 19, 20, 21, 22, ];
     private array $numberFormats = [];
@@ -50,7 +56,7 @@ final class Styles extends AbstractXMLDictionary
 
     private function processCellXfs(XMLReader $xml): bool
     {
-        if ('cellXfs' === $xml->name) {
+        if (self::CELL_XFS === $xml->name) {
             return match ($xml->nodeType) {
                 XMLReader::END_ELEMENT => true,
                 XMLReader::ELEMENT => $this->inXfs = true,
@@ -73,8 +79,8 @@ final class Styles extends AbstractXMLDictionary
 
     private function xfs(XMLReader $xml): void
     {
-        if ($this->inXfs && XMLReader::ELEMENT === $xml->nodeType && 'xf' === $xml->name) {
-            $this->values[] = $this->getValue(fmtId: (int) $xml->getAttribute(name: 'numFmtId'));
+        if ($this->inXfs && XMLReader::ELEMENT === $xml->nodeType && self::XF === $xml->name) {
+            $this->values[] = $this->getValue(fmtId: (int) $xml->getAttribute(name: self::NUM_FORMAT_ID));
         }
     }
 
@@ -82,8 +88,8 @@ final class Styles extends AbstractXMLDictionary
     {
         if (XMLReader::ELEMENT === $xml->nodeType) {
             match ($xml->name) {
-                'numFmt' => $this->numberFormats[$xml->getAttribute(name: 'numFmtId')] = $this->matchDateFormat(xml: $xml),
-                'cellXfs' => $this->needsRewind = true,
+                self::NUM_FORMAT => $this->numberFormats[$xml->getAttribute(name: self::NUM_FORMAT_ID)] = $this->matchDateFormat(xml: $xml),
+                self::CELL_XFS => $this->needsRewind = true,
                 default => null,
             };
         }
@@ -91,7 +97,7 @@ final class Styles extends AbstractXMLDictionary
 
     private function matchDateFormat(XMLReader $xml): int
     {
-        return preg_match(pattern: '{^(\[\$[[:alpha:]]*-[0-9A-F]*\])*[hmsdy]}i', subject: $xml->getAttribute(name: 'formatCode')) ? self::FORMAT_DATE : self::FORMAT_DEFAULT;
+        return preg_match(pattern: '{^(\[\$[[:alpha:]]*-[0-9A-F]*\])*[hmsdy]}i', subject: $xml->getAttribute(name: self::FORMAT_CODE)) ? self::FORMAT_DATE : self::FORMAT_DEFAULT;
     }
 
     private function getValue(int $fmtId): int

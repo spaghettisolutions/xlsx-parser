@@ -12,7 +12,10 @@ use function array_flip;
 use function array_key_exists;
 use function sprintf;
 
-class InvalidArchiveException extends RuntimeException
+/**
+ * @internal
+ */
+final class InvalidArchiveException extends RuntimeException
 {
     public function __construct(int $code, ?Throwable $previous = null)
     {

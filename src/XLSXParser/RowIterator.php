@@ -10,6 +10,13 @@ use XMLReader;
  */
 final class RowIterator implements Iterator
 {
+    private const ROW = 'row';
+    private const ROW_INDEX = 'r';
+    private const COLUMN = 'c';
+    private const VALUE = 'v';
+    private const STYLE = 's';
+    private const TYPE = 't';
+
     private ?Row $row = null;
     private XMLReader $xml;
     private array $currentValue;
@@ -76,7 +83,7 @@ final class RowIterator implements Iterator
 
     private function processEndValue(): void
     {
-        if ('row' === $this->xml->name) {
+        if (self::ROW === $this->xml->name) {
             $currentValue = $this->row?->getData();
             if ([] !== $currentValue) {
                 $this->currentValue = $currentValue;
@@ -89,9 +96,9 @@ final class RowIterator implements Iterator
     {
         if (XMLReader::ELEMENT === $this->xml->nodeType) {
             match ($this->xml->name) {
-                'row' => $this->processRow(),
-                'c' => $this->processColumn(),
-                'v' => $this->processValue(),
+                self::ROW => $this->processRow(),
+                self::COLUMN => $this->processColumn(),
+                self::VALUE => $this->processValue(),
                 default => $this->processDefault(),
             };
         }
@@ -99,15 +106,15 @@ final class RowIterator implements Iterator
 
     private function processRow(): void
     {
-        $this->currentKey = (int) $this->xml->getAttribute(name: 'r');
+        $this->currentKey = (int) $this->xml->getAttribute(name: self::ROW_INDEX);
         $this->row = new Row();
     }
 
     private function processColumn(): void
     {
-        $this->index = $this->columnTransformer->transform(name: $this->xml->getAttribute(name: 'r'));
-        $this->style = $this->xml->getAttribute(name: 's') ?? '';
-        $this->type = $this->xml->getAttribute(name: 't') ?? '';
+        $this->index = $this->columnTransformer->transform(name: $this->xml->getAttribute(name: self::ROW_INDEX));
+        $this->style = $this->xml->getAttribute(name: self::STYLE) ?? '';
+        $this->type = $this->xml->getAttribute(name: self::TYPE) ?? '';
     }
 
     private function processValue(): void

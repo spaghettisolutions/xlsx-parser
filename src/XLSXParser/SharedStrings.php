@@ -12,6 +12,9 @@ use function trim;
  */
 final class SharedStrings extends AbstractXMLDictionary
 {
+    private const INDEX = 'si';
+    private const VALUE = 't';
+
     private int $currentIndex = -1;
 
     protected function readNext(): void
@@ -31,8 +34,8 @@ final class SharedStrings extends AbstractXMLDictionary
     private function process(XMLReader $xml): void
     {
         match ($xml->name) {
-            'si' => $this->currentIndex++,
-            't' => $this->values[$this->currentIndex] = trim(string: strtr($xml->readString(), ["\u{a0}" => ' ']), characters: ' '),
+            self::INDEX => $this->currentIndex++,
+            self::VALUE => $this->values[$this->currentIndex] = trim(string: strtr($xml->readString(), ["\u{a0}" => ' ']), characters: ' '),
             default => null,
         };
     }

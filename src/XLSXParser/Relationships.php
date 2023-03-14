@@ -11,6 +11,14 @@ use function basename;
  */
 final class Relationships extends AbstractXMLResource
 {
+    private const WORKSHEET = 'worksheet';
+    private const STYLES = 'styles';
+    private const SHARED_STRINGS = 'sharedStrings';
+    private const RELATIONSHIP = 'Relationship';
+    private const TARGET = 'Target';
+    private const TYPE = 'Type';
+    private const ID = 'Id';
+
     private array $workSheetPaths = [];
     private string $sharedStringPath = '';
     private string $stylePath = '';
@@ -21,13 +29,13 @@ final class Relationships extends AbstractXMLResource
         $xml = $this->getXMLReader();
 
         while ($xml->read()) {
-            if (XMLReader::ELEMENT === $xml->nodeType && 'Relationship' === $xml->name) {
-                $target = 'xl/' . $xml->getAttribute(name: 'Target');
+            if (XMLReader::ELEMENT === $xml->nodeType && self::RELATIONSHIP === $xml->name) {
+                $target = 'xl/' . $xml->getAttribute(name: self::TARGET);
 
-                match (basename(path: (string) $xml->getAttribute(name: 'Type'))) {
-                    'worksheet' => $this->workSheetPaths[$xml->getAttribute(name: 'Id')] = $target,
-                    'styles' => $this->stylePath = $target,
-                    'sharedStrings' => $this->sharedStringPath = $target,
+                match (basename(path: (string) $xml->getAttribute(name: self::TYPE))) {
+                    self::WORKSHEET => $this->workSheetPaths[$xml->getAttribute(name: self::ID)] = $target,
+                    self::STYLES => $this->stylePath = $target,
+                    self::SHARED_STRINGS => $this->sharedStringPath = $target,
                     default => null,
                 };
             }

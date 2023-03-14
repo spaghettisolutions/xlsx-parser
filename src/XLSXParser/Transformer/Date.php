@@ -13,15 +13,15 @@ use function gmdate;
  */
 final class Date
 {
+    private const DATETIME_FORMAT = 'd-m-Y H:i:s';
+
     public function transform(float|int $value): DateTimeImmutable
     {
-        $format = 'd-m-Y H:i:s';
-
         $value = (int) floor(num: $value);
         /** @noinspection SummerTimeUnsafeTimeManipulationInspection */
         $unix = ($value - 25569) * 86400;
-        $date = gmdate(format: $format, timestamp: $unix);
+        $date = gmdate(format: self::DATETIME_FORMAT, timestamp: $unix);
 
-        return date_create_immutable_from_format(format: '!' . $format, datetime: $date);
+        return date_create_immutable_from_format(format: '!' . self::DATETIME_FORMAT, datetime: $date);
     }
 }

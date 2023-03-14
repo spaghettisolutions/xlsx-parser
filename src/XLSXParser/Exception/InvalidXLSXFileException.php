@@ -7,7 +7,10 @@ use Throwable;
 
 use function sprintf;
 
-class InvalidXLSXFileException extends InvalidArgumentException
+/**
+ * @internal
+ */
+final class InvalidXLSXFileException extends InvalidArgumentException
 {
     public function __construct(string $path, ?Throwable $previous = null)
     {

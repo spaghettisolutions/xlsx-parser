@@ -4,6 +4,9 @@ namespace Spaghetti\XLSXParser\Contracts;
 
 use Iterator;
 
+/**
+ * @internal
+ */
 interface XLSXInterface
 {
     public function getIndex(string $name): int;

@@ -16,10 +16,10 @@ use const FILTER_VALIDATE_BOOL;
  */
 final class Value
 {
-    private const TYPE_BOOL = 'b';
-    private const TYPE_EMPTY = '';
-    private const TYPE_NUMBER = 'n';
-    private const TYPE_SHARED_STRING = 's';
+    private const BOOL = 'b';
+    private const EMPTY = '';
+    private const NUMBER = 'n';
+    private const SHARED_STRING = 's';
 
     private readonly Date $dateTransformer;
 
@@ -31,9 +31,9 @@ final class Value
     public function transform(string $value, string $type, string $style): bool|DateTimeImmutable|float|int|string
     {
         return match ($type) {
-            self::TYPE_BOOL => filter_var(value: $value, filter: FILTER_VALIDATE_BOOL),
-            self::TYPE_SHARED_STRING => trim(string: $this->sharedStrings->get(index: (int) $value)),
-            self::TYPE_EMPTY, self::TYPE_NUMBER => $this->transformNumber(style: $style, value: $value),
+            self::BOOL => filter_var(value: $value, filter: FILTER_VALIDATE_BOOL),
+            self::SHARED_STRING => trim(string: $this->sharedStrings->get(index: (int) $value)),
+            self::EMPTY, self::NUMBER => $this->transformNumber(style: $style, value: $value),
             default => trim(string: $value),
         };
     }
