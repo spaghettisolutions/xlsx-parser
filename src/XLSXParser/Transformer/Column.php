@@ -12,16 +12,14 @@ final class Column
 {
     public function transform(string $name): int
     {
-        $number = 0;
+        $number = -1;
 
         foreach (str_split(string: $name) as $char) {
             $digit = ord(character: $char) - 65;
-
             if ($digit < 0) {
                 break;
             }
-
-            $number = $number * 26 + $digit;
+            $number = ($number + 1) * 26 + $digit;
         }
 
         return $number;
