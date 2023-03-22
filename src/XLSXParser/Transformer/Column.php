@@ -19,6 +19,7 @@ final class Column
             if ($digit < 0) {
                 break;
             }
+
             $number = ($number + 1) * 26 + $digit;
         }
 
