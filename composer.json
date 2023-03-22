@@ -17,6 +17,11 @@
         {
             "name": "simpletoimplement",
             "email": "simpletoimplement@gmail.com"
+        },
+        {
+            "name": "Dāvis Zālītis (k0d3r1s)",
+            "email": "k0d3r1s@vairogs.com",
+            "homepage": "https://me.k0d3r1s.com"
         }
     ],
     "require": {
