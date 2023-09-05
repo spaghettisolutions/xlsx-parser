@@ -35,7 +35,7 @@ final class SharedStrings extends AbstractXMLDictionary
     {
         match ($xml->name) {
             self::INDEX => $this->currentIndex++,
-            self::VALUE => $this->values[$this->currentIndex] = trim(string: strtr($xml->readString(), ["\u{a0}" => ' ']), characters: ' '),
+            self::VALUE => $this->values[$this->currentIndex][] = trim(string: strtr($xml->readString(), ["\u{a0}" => ' ']), characters: ' '),
             default => null,
         };
     }
