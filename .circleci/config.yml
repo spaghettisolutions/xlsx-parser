@@ -4,7 +4,7 @@ jobs:
         environment:
             CC_TEST_REPORTER_ID: 4473901b40a4467ff2db5da9271671ef7545c987b38f5f1490ec254ebc3778e0
         docker:
-            -   image: k0d3r1s/php-fpm:unstable-testing
+            -   image: ghcr.io/960018/php-fpm:testing-amd64
         resource_class: small
         working_directory: ~/repo
         steps:
