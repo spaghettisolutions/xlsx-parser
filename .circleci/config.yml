@@ -1,17 +1,23 @@
-version: 2.0
+version: 2.1
 jobs:
     build:
         environment:
             CC_TEST_REPORTER_ID: 4473901b40a4467ff2db5da9271671ef7545c987b38f5f1490ec254ebc3778e0
         docker:
-            -   image: ghcr.io/960018/php-fpm:testing-amd64
+            -   image: cimg/php:8.1.23
         resource_class: small
         working_directory: ~/repo
         steps:
             - checkout
+            - run: php -v
+            - run: sudo -E install-php-extensions xdebug
+            - run: sudo docker-php-ext-enable xdebug
             - run: composer install -n --prefer-dist
             - run: curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
             - run: chmod +x ./cc-test-reporter
             - run: ./cc-test-reporter before-build
-            - run: vendor/bin/phpunit --coverage-clover clover.xml
+            - run:
+                command: vendor/bin/phpunit --coverage-clover clover.xml
+                environment:
+                    XDEBUG_MODE: coverage
             - run: ./cc-test-reporter after-build --coverage-input-type clover --exit-code $?
