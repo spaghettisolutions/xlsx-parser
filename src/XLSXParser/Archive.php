@@ -9,6 +9,7 @@ use Spaghetti\XLSXParser\Exception\InvalidArchiveException;
 use ZipArchive;
 
 use function file_exists;
+use function is_dir;
 use function rmdir;
 use function sprintf;
 use function sys_get_temp_dir;
@@ -25,7 +26,12 @@ final class Archive
 
     public function __construct(private readonly string $archivePath)
     {
-        $this->tmpPath = tempnam(directory: sys_get_temp_dir(), prefix: 'spaghetti_xlsx_parser_archive');
+        $tmpDir = sys_get_temp_dir();
+        if (is_dir(filename: '/dev/shm')) {
+            $tmpDir = '/dev/shm';
+        }
+
+        $this->tmpPath = tempnam(directory: $tmpDir, prefix: 'spaghetti_xlsx_parser_archive');
         unlink(filename: $this->tmpPath);
     }
 
