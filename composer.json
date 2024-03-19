@@ -8,7 +8,6 @@
         "library",
         "parser",
         "php",
-        "symfony",
         "xlsx",
         "xlsx-parser"
     ],
@@ -51,7 +50,7 @@
     },
     "extra": {
         "branch-alias": {
-            "dev-spaghetti": "1.x-dev"
+            "dev-spaghetti": "1.3.x-dev"
         },
         "thanks": {
             "name": "spaghetti/xlsx-parser",
