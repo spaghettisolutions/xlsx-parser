@@ -1,3 +1,9 @@
+# !!! ATTENTION !!!
+
+## This repository is no longer maintained! My friend has taken over it in [valksor/php-xlsx-parser](https://github.com/valksor/php-xlsx-parser)
+
+---
+
 <p align="center">
   <a href="https://github.com/spaghettisolutions"><img src="https://avatars.githubusercontent.com/u/99179033?s=84&v=4"></a><br>
 </p>
